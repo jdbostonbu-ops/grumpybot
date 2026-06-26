@@ -86,7 +86,7 @@ a {
 .nav {
   background: #fff;
   border-bottom: var(--border);
-  padding: 16px 32px;
+  padding: 22px 40px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -96,7 +96,7 @@ a {
   display: flex;
   align-items: center;
   gap: 8px;
-  font-size: 1.4rem;
+  font-size: 1.7rem;
   font-weight: 500;
   color: var(--navy);
   text-decoration: none;
@@ -117,8 +117,9 @@ a {
 .nav__links {
   display: flex;
   align-items: center;
-  gap: 26px;
-  font-size: 1.06rem;
+  gap: 32px;
+  font-size: 1.35rem;
+  font-weight: 500;
 }
 
 .nav__links a {
@@ -250,4 +251,138 @@ a {
   border-radius: 50%;
   animation: hb-spin 0.7s linear infinite;
   vertical-align: middle;
+}
+
+/* Landing page ------------------------------------------------- */
+/* Landing page ------------------------------------------------- */
+
+.hero {
+  text-align: center;
+  padding: 5rem 1.5rem 4rem;
+}
+
+.hero__inner {
+  max-width: 860px;
+  margin: 0 auto;
+}
+
+.hero__eyebrow {
+  display: inline-block;
+  background: var(--yellow);
+  color: var(--navy);
+  font-weight: 500;
+  font-size: 1.1rem;
+  padding: 8px 22px;
+  border-radius: var(--radius-pill);
+  border: 3px solid var(--navy);
+  margin-bottom: 2rem;
+}
+
+.hero__title {
+  font-size: 4.5rem;
+  line-height: 1.05;
+  margin-bottom: 1.75rem;
+}
+
+.hero__lead {
+  font-size: 1.6rem;
+  line-height: 1.5;
+  color: var(--navy);
+  max-width: 720px;
+  margin: 0 auto 2.5rem;
+}
+
+.hero__actions {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.hero__actions .btn {
+  font-size: 1.25rem;
+  padding: 16px 34px;
+}
+
+.feature-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin: 3rem 0;
+}
+
+.feature {
+  padding: 2rem;
+}
+
+.feature__badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  border: 3px solid var(--navy);
+  font-weight: 500;
+  font-size: 1.6rem;
+  margin-bottom: 1rem;
+}
+
+.feature__badge--pink {
+  background: var(--hot-pink);
+  color: #fff;
+}
+
+.feature__badge--teal {
+  background: var(--teal);
+  color: var(--navy);
+}
+
+.feature__badge--yellow {
+  background: var(--yellow);
+  color: var(--navy);
+}
+
+.feature h3 {
+  font-size: 1.7rem;
+  margin-bottom: 0.75rem;
+}
+
+.feature p {
+  font-size: 1.2rem;
+  line-height: 1.55;
+}
+
+.cta {
+  text-align: center;
+  background: var(--purple-soft);
+  margin: 3rem 0 5rem;
+  padding: 3.5rem 1.5rem;
+}
+
+.cta h2 {
+  font-size: 2.4rem;
+  margin-bottom: 0.75rem;
+}
+
+.cta p {
+  font-size: 1.3rem;
+  margin-bottom: 2rem;
+}
+
+.cta .btn {
+  font-size: 1.25rem;
+  padding: 16px 34px;
+}
+
+@media (max-width: 700px) {
+  .feature-grid {
+    grid-template-columns: 1fr;
+  }
+  .hero__title {
+    font-size: 2.8rem;
+  }
+  .hero__lead {
+    font-size: 1.3rem;
+  }
 }
