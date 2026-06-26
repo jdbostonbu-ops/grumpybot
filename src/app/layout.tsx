@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'HandbookBot',
+  title: 'GrumpyBot',
   description: 'Turn your handbook into a bot anyone can ask.',
 };
 

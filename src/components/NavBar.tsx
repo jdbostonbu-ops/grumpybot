@@ -1,14 +1,18 @@
 import Link from 'next/link';
+import Image from 'next/image';
 
-// The HandbookBot top nav. Appears on every page for consistency.
-// Links are placeholders for the pages built in later steps.
+// The GrumpyBot top nav. Appears on every page for consistency.
 export const NavBar = (): React.ReactElement => (
   <nav className="nav">
     <Link href="/" className="nav__brand">
-      <span className="nav__logo" aria-hidden="true">
-        H
-      </span>
-      HandbookBot
+      <Image
+        src="/grumpybot-logo.svg"
+        alt="GrumpyBot logo"
+        width={40}
+        height={40}
+        priority
+      />
+      GrumpyBot
     </Link>
     <div className="nav__links">
       <Link href="/how-it-works">How it works</Link>
