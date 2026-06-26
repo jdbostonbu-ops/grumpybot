@@ -15,12 +15,12 @@ const PricingPage = async (): Promise<React.ReactElement> => {
       <main>
         <section className="hero hero--yellow">
           <div className="hero__inner">
-            <h1 className="hero__title">Simple pricing. No surprises.</h1>
+            <h1 className="hero__title">Simple pricing.<br />No surprises.</h1>
             <p className="hero__lead">Start free. Upgrade when your bot gets popular.</p>
           </div>
         </section>
 
-        <div className="container">
+        <div className="container-wide">
           <div className="pricing-grid">
             <div className="card price-card">
               <h3 className="price-card__name">Starter</h3>

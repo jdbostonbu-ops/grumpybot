@@ -5,7 +5,7 @@ import { bots } from '@/lib/bot';
 import { NavBar } from '@/components/NavBar';
 import { DashboardClient } from '@/components/DashboardClient';
 
-// Layer 2 protection: re-verify session before rendering.
+// Layer 2 protection: re-verify the session server-side before rendering.
 const DashboardPage = async (): Promise<React.ReactElement> => {
   const userId = await getSessionUserId();
   if (userId === null) {
@@ -25,20 +25,17 @@ const DashboardPage = async (): Promise<React.ReactElement> => {
     select: { id: true, filename: true },
   });
 
-  const documentIds = documents.map((doc) => doc.id);
-  const chunkCount =
-    documentIds.length === 0
-      ? 0
-      : await prisma.chunk.count({ where: { documentId: { in: documentIds } } });
+  const chunkCount = await prisma.chunk.count({
+    where: { document: { botId: bot.id } },
+  });
 
   return (
     <div className="page">
       <NavBar />
       <DashboardClient
-        botId={bot.id}
         botName={bot.name}
-        initialDocuments={documents}
-        chunkCount={chunkCount}
+        initialDocs={documents}
+        initialChunkCount={chunkCount}
       />
     </div>
   );
