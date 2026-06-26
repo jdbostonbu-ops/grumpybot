@@ -1,0 +1,71 @@
+// HandbookBot — Prisma schema
+// See PLAN.md for the full data model rationale.
+//
+// NOTE on pgvector: Prisma does not natively model the `vector` type, so the
+// embedding column is declared as Unsupported("vector(1536)"). Reads/writes of
+// the embedding (and similarity search) are done with raw SQL ($queryRaw /
+// $executeRaw) — see src/lib/retrieval.ts. 1536 = dimensions of OpenAI's
+// text-embedding-3-small model.
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["postgresqlExtensions"]
+}
+
+datasource db {
+  provider   = "postgresql"
+  url        = env("DATABASE_URL")
+  directUrl  = env("DIRECT_URL")
+  extensions = [vector]
+}
+
+model User {
+  id               String    @id @default(cuid())
+  email            String    @unique
+  passwordHash     String
+  verified         Boolean   @default(false)
+  verificationCode String?
+  resetCode        String?
+  resetCodeExpires DateTime?
+  createdAt        DateTime  @default(now())
+
+  bots Bot[]
+}
+
+model Bot {
+  id        String   @id @default(cuid())
+  name      String
+  theme     String?
+  ownerId   String
+  createdAt DateTime @default(now())
+
+  owner     User       @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  documents Document[]
+
+  @@index([ownerId])
+}
+
+model Document {
+  id        String   @id @default(cuid())
+  filename  String
+  content   String
+  botId     String
+  createdAt DateTime @default(now())
+
+  bot    Bot     @relation(fields: [botId], references: [id], onDelete: Cascade)
+  chunks Chunk[]
+
+  @@index([botId])
+}
+
+model Chunk {
+  id         String   @id @default(cuid())
+  text       String
+  embedding  Unsupported("vector(1536)")?
+  documentId String
+  createdAt  DateTime @default(now())
+
+  document Document @relation(fields: [documentId], references: [id], onDelete: Cascade)
+
+  @@index([documentId])
+}
