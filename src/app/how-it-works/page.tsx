@@ -3,7 +3,6 @@ import Link from 'next/link';
 import { getSessionUserId } from '@/lib/session';
 import { NavBar } from '@/components/NavBar';
 
-// Layer 2 protection: every page requires login (per PLAN.md, no public pages).
 const HowItWorksPage = async (): Promise<React.ReactElement> => {
   const userId = await getSessionUserId();
   if (userId === null) {
@@ -14,27 +13,23 @@ const HowItWorksPage = async (): Promise<React.ReactElement> => {
     <div className="page">
       <NavBar />
       <main>
-        <section className="hero hero--compact">
+        <section className="hero hero--green">
           <div className="hero__inner">
-            <p className="hero__eyebrow">How it works</p>
-            <h1 className="hero__title">From documents to a bot in minutes.</h1>
-            <p className="hero__lead">
-              GrumpyBot reads your files, learns what is in them, and answers
-              questions using only your words. Here is the whole journey.
-            </p>
+            <h1 className="hero__title">From documents to a bot in 3 steps.</h1>
+            <p className="hero__lead">No code. No training. No nonsense.</p>
           </div>
         </section>
 
-        <section className="container">
+        <div className="container-wide">
           <div className="step-list">
             <div className="card step">
-              <span className="feature__badge feature__badge--pink">1</span>
+              <span className="feature__badge feature__badge--yellow">1</span>
               <div className="step__body">
-                <h3>You upload your documents</h3>
+                <h3>Upload your documents</h3>
                 <p>
-                  Add your handbook, menu, policies, or FAQ as markdown, plain
-                  text, or JSON. GrumpyBot reads the text straight out of each
-                  file — nothing else needed.
+                  Drop in whatever your business runs on — handbook, menu,
+                  policies, FAQs. We accept .md, .txt, and .json. The Grumpy Bean
+                  uploaded its rulebook; you upload yours.
                 </p>
               </div>
             </div>
@@ -42,62 +37,52 @@ const HowItWorksPage = async (): Promise<React.ReactElement> => {
             <div className="card step">
               <span className="feature__badge feature__badge--teal">2</span>
               <div className="step__body">
-                <h3>We break them into pieces</h3>
+                <h3>We build your bot automatically</h3>
                 <p>
-                  Each document is split into bite-sized chunks so the bot can
-                  pinpoint the exact part that answers a question instead of
-                  guessing from the whole thing.
+                  Your documents get split into searchable pieces and indexed in
+                  seconds. When someone asks a question, the bot finds the most
+                  relevant pieces and answers using only those — so it never makes
+                  things up.
                 </p>
               </div>
             </div>
 
             <div className="card step">
-              <span className="feature__badge feature__badge--yellow">3</span>
+              <span className="feature__badge feature__badge--pink">3</span>
               <div className="step__body">
-                <h3>We turn words into meaning</h3>
+                <h3>Share it with the world</h3>
                 <p>
-                  Every chunk gets an embedding — a way of capturing what it means
-                  — so the bot can match a question to the right passage even when
-                  the wording is different.
-                </p>
-              </div>
-            </div>
-
-            <div className="card step">
-              <span className="feature__badge feature__badge--pink">4</span>
-              <div className="step__body">
-                <h3>Someone asks a question</h3>
-                <p>
-                  GrumpyBot finds the closest matching chunks from your documents
-                  and hands only those to the AI as the source material for its
-                  answer.
-                </p>
-              </div>
-            </div>
-
-            <div className="card step">
-              <span className="feature__badge feature__badge--teal">5</span>
-              <div className="step__body">
-                <h3>It answers — grounded, with sources</h3>
-                <p>
-                  The bot replies using only what it found in your documents, and
-                  shows which files it used. If the answer is not in your
-                  documents, it says so instead of making something up.
+                  Get a link or embed the chat right on your website. Customers ask
+                  questions and get instant, accurate answers — with the source
+                  shown, so they know it&apos;s legit.
                 </p>
               </div>
             </div>
           </div>
-        </section>
 
-        <section className="container">
-          <div className="cta card">
-            <h2>That is the whole trick.</h2>
-            <p>Upload your documents and watch your own grounded bot come to life.</p>
-            <Link href="/dashboard" className="btn btn--dark">
-              Build my bot
+          <div className="callout">
+            <h2 className="callout__title">The best part: it only knows what you tell it</h2>
+            <p className="callout__text">
+              Ask the Grumpy Bean bot for the wifi password and it&apos;ll refuse —
+              because it&apos;s not in the handbook. Grounded answers, every time.
+            </p>
+          </div>
+        </div>
+
+        <section className="band band--yellow">
+          <div className="band__inner">
+            <h2>See it in action</h2>
+            <Link href="/examples" className="btn btn--dark">
+              Try the Grumpy Bean example
             </Link>
           </div>
         </section>
+
+        <footer className="band band--navy">
+          <div className="band__inner">
+            GrumpyBot · turn any document into a bot · made with ☕ and AI
+          </div>
+        </footer>
       </main>
     </div>
   );

@@ -1,6 +1,6 @@
 /* ──────────────────────────────────────────────────────────────
-   HandbookBot — design system
-   Locked palette & tokens from the approved mockups.
+   GrumpyBot — design system
+   Only classes in active use. Palette & tokens from the mockups.
    ────────────────────────────────────────────────────────────── */
 
 :root {
@@ -41,7 +41,6 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* Only two weights: 400 regular, 500 medium. Sentence case everywhere. */
 h1,
 h2,
 h3 {
@@ -49,28 +48,24 @@ h3 {
   margin: 0 0 0.5rem;
 }
 
-h1 {
-  font-size: 2rem;
-}
-h2 {
-  font-size: 1.4rem;
-}
-h3 {
-  font-size: 1.1rem;
-}
-
 a {
   color: var(--purple);
 }
 
-/* Layout shell ------------------------------------------------- */
+/* Layout ------------------------------------------------------- */
 
 .page {
   min-height: 100vh;
 }
 
 .container {
-  max-width: 960px;
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 1.5rem;
+}
+
+.container-wide {
+  max-width: 1380px;
   margin: 0 auto;
   padding: 1.5rem;
 }
@@ -81,7 +76,7 @@ a {
   padding: 1.5rem;
 }
 
-/* Top nav (HandbookBot, on every page) ------------------------- */
+/* Nav ---------------------------------------------------------- */
 
 .nav {
   background: #fff;
@@ -95,23 +90,11 @@ a {
 .nav__brand {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 12px;
   font-size: 1.7rem;
   font-weight: 500;
   color: var(--navy);
   text-decoration: none;
-}
-
-.nav__logo {
-  width: 32px;
-  height: 32px;
-  border-radius: 9px;
-  background: var(--purple);
-  color: var(--yellow);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 500;
 }
 
 .nav__links {
@@ -125,14 +108,19 @@ a {
 .nav__links a {
   color: var(--navy);
   text-decoration: none;
-  opacity: 0.75;
 }
 
 .nav__links a:hover {
-  opacity: 1;
+  color: var(--purple);
 }
 
-/* Cards -------------------------------------------------------- */
+.nav__links a.btn--primary,
+.nav__links a.btn--primary:hover {
+  color: #fff;
+  background-color: var(--purple);
+}
+
+/* Card --------------------------------------------------------- */
 
 .card {
   background: #fff;
@@ -141,7 +129,7 @@ a {
   padding: 1.25rem;
 }
 
-/* Buttons (pill) ----------------------------------------------- */
+/* Buttons ------------------------------------------------------ */
 
 .btn {
   display: inline-flex;
@@ -163,17 +151,6 @@ a {
   color: #fff;
 }
 
-.nav__links a.btn--primary {
-  color: #fff;
-  background: var(--purple);
-  opacity: 1;
-}
-
-.nav__links a.btn--primary:hover {
-  color: #fff;
-  opacity: 1;
-}
-
 .btn--dark {
   background: var(--navy);
   color: #fff;
@@ -183,6 +160,11 @@ a {
   background: #fff;
   color: var(--navy);
   border: 2px solid var(--navy);
+}
+
+.btn--yellow {
+  background: var(--yellow);
+  color: var(--navy);
 }
 
 .btn:disabled {
@@ -234,7 +216,19 @@ a {
   margin: 0.5rem 0;
 }
 
-/* Spinner (reused from the AnglerCast pattern) ----------------- */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Spinner ------------------------------------------------------ */
 
 @keyframes hb-spin {
   to {
@@ -253,12 +247,23 @@ a {
   vertical-align: middle;
 }
 
-/* Landing page ------------------------------------------------- */
-/* Landing page ------------------------------------------------- */
+/* Hero (colored full-width banner) ----------------------------- */
 
 .hero {
   text-align: center;
   padding: 5rem 1.5rem 4rem;
+}
+
+.hero--pink {
+  background: var(--hot-pink);
+}
+
+.hero--green {
+  background: var(--mint);
+}
+
+.hero--yellow {
+  background: var(--yellow);
 }
 
 .hero__inner {
@@ -287,9 +292,20 @@ a {
 .hero__lead {
   font-size: 1.9rem;
   line-height: 1.5;
-  color: var(--navy);
   max-width: 1040px;
   margin: 0 auto 2.5rem;
+}
+
+.hero--pink .hero__title,
+.hero--green .hero__title,
+.hero--pink .hero__lead,
+.hero--green .hero__lead {
+  color: #fff;
+}
+
+.hero--yellow .hero__title,
+.hero--yellow .hero__lead {
+  color: var(--navy);
 }
 
 .hero__actions {
@@ -304,16 +320,111 @@ a {
   padding: 16px 34px;
 }
 
+/* Full-width color bands --------------------------------------- */
+
+.band {
+  width: 100%;
+  padding: 4rem 1.5rem;
+  text-align: center;
+}
+
+.band__inner {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.band--yellow {
+  background: var(--yellow);
+  color: var(--navy);
+}
+
+.band--yellow h2 {
+  font-size: 2.8rem;
+  margin-bottom: 0.75rem;
+  color: var(--navy);
+}
+
+.band--yellow p {
+  font-size: 1.4rem;
+  margin-bottom: 2rem;
+  color: var(--navy);
+}
+
+.band--yellow .btn {
+  font-size: 1.25rem;
+  padding: 16px 34px;
+}
+
+.band--navy {
+  background: var(--navy);
+  color: #fff;
+  padding: 1.5rem;
+  font-size: 1.05rem;
+}
+
+/* Section headings (landing) ----------------------------------- */
+
+.section-title {
+  text-align: center;
+  font-size: 2.4rem;
+  margin: 1rem 0 1.5rem;
+}
+
+.section-sub {
+  text-align: center;
+  color: var(--purple);
+  font-size: 1.15rem;
+  margin: -0.75rem 0 1.5rem;
+}
+
+/* Feature grid (landing "how it works" icon boxes) ------------- */
+
 .feature-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 24px;
-  margin: 3rem 0;
+  margin: 0 0 3rem;
 }
 
-.feature {
-  padding: 2rem;
+.feature--center {
+  text-align: center;
 }
+
+.feature--center h3 {
+  font-size: 1.5rem;
+}
+
+.feature--center p {
+  font-size: 1.2rem;
+  line-height: 1.55;
+}
+
+.icon-circle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  font-size: 1.8rem;
+  margin-bottom: 1rem;
+  color: var(--navy);
+}
+
+.icon-circle--yellow {
+  background: var(--yellow);
+}
+
+.icon-circle--teal {
+  background: var(--teal);
+}
+
+.icon-circle--green {
+  background: var(--mint);
+  color: #fff;
+}
+
+/* Feature badges (numbered circles, used by step cards) -------- */
 
 .feature__badge {
   display: inline-flex;
@@ -325,7 +436,6 @@ a {
   border: 3px solid var(--navy);
   font-weight: 500;
   font-size: 1.6rem;
-  margin-bottom: 1rem;
 }
 
 .feature__badge--pink {
@@ -343,61 +453,56 @@ a {
   color: var(--navy);
 }
 
-.feature h3 {
-  font-size: 1.7rem;
-  margin-bottom: 0.75rem;
-}
+/* Business cards (landing) ------------------------------------- */
 
-.feature p {
-  font-size: 1.2rem;
-  line-height: 1.55;
-}
-
-.cta {
-  text-align: center;
-  background: var(--purple-soft);
-  margin: 3rem 0 5rem;
-  padding: 3.5rem 1.5rem;
-}
-
-.cta h2 {
-  font-size: 2.4rem;
-  margin-bottom: 0.75rem;
-}
-
-.cta p {
-  font-size: 1.3rem;
+.biz-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
   margin-bottom: 2rem;
 }
 
-.cta .btn {
-  font-size: 1.25rem;
-  padding: 16px 34px;
+.biz-card {
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  color: #fff;
 }
 
-@media (max-width: 700px) {
-  .feature-grid {
-    grid-template-columns: 1fr;
-  }
-  .hero__title {
-    font-size: 2.8rem;
-  }
-  .hero__lead {
-    font-size: 1.3rem;
-  }
+.biz-card--purple {
+  background: var(--purple);
 }
 
-/* How it works page -------------------------------------------- */
-
-.hero--compact {
-  padding: 4rem 1.5rem 2rem;
+.biz-card--pink {
+  background: var(--hot-pink);
 }
+
+.biz-card--green {
+  background: var(--mint);
+}
+
+.biz-card__icon {
+  font-size: 1.8rem;
+}
+
+.biz-card__name {
+  color: #fff;
+  font-size: 1.4rem;
+  margin: 0.5rem 0 0.25rem;
+}
+
+.biz-card__meta {
+  margin: 0;
+  font-size: 1.05rem;
+  opacity: 0.9;
+}
+
+/* How it works steps ------------------------------------------- */
 
 .step-list {
   display: flex;
   flex-direction: column;
   gap: 20px;
-  max-width: 760px;
+  max-width: 100%;
   margin: 2rem auto 3rem;
 }
 
@@ -409,7 +514,6 @@ a {
 }
 
 .step .feature__badge {
-  margin-bottom: 0;
   flex-shrink: 0;
 }
 
@@ -424,7 +528,30 @@ a {
   margin: 0;
 }
 
-/* Pricing page ------------------------------------------------- */
+/* How it works callout ----------------------------------------- */
+
+.callout {
+  background: var(--navy);
+  color: #fff;
+  border-radius: var(--radius-lg);
+  padding: 2.5rem 2rem;
+  text-align: center;
+  margin: 2rem 0 0;
+}
+
+.callout__title {
+  font-size: 1.9rem;
+  color: #fff;
+  margin-bottom: 0.75rem;
+}
+
+.callout__text {
+  font-size: 1.2rem;
+  margin: 0 auto;
+  max-width: 720px;
+}
+
+/* Pricing ------------------------------------------------------ */
 
 .pricing-grid {
   display: grid;
@@ -464,6 +591,7 @@ a {
 .price-card__name {
   font-size: 1.7rem;
   margin-bottom: 0.5rem;
+  color: var(--purple);
 }
 
 .price-card__price {
@@ -482,6 +610,7 @@ a {
 .price-card__tagline {
   font-size: 1.15rem;
   margin-bottom: 1.25rem;
+  color: var(--purple);
 }
 
 .price-card__list {
@@ -519,11 +648,522 @@ a {
   color: var(--navy);
   opacity: 0.75;
   max-width: 640px;
-  margin: 1.5rem auto 4rem;
+  margin: 1.5rem auto 0;
+}
+
+/* Dashboard ---------------------------------------------------- */
+
+.dash-card {
+  border: 3px solid var(--navy);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  margin: 1.5rem 0 0;
+  background: #fff;
+}
+
+.dash-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.5rem;
+  border-bottom: 3px solid var(--navy);
+}
+
+.dash-header__brand {
+  font-weight: 500;
+  font-size: 1.2rem;
+  color: var(--purple);
+}
+
+.dash-header__bot {
+  font-weight: 500;
+  font-size: 1.1rem;
+  color: var(--navy);
+}
+
+.dash-title {
+  font-size: 2.6rem;
+  padding: 1.5rem 1.5rem 0;
+  margin: 0;
+}
+
+.dash-sub {
+  color: var(--purple);
+  font-size: 1.15rem;
+  padding: 0 1.5rem;
+  margin: 0.25rem 0 0;
+}
+
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  padding: 1.5rem;
+}
+
+.stat {
+  border-radius: var(--radius-lg);
+  padding: 1.25rem 1.5rem;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.stat__label {
+  font-size: 1rem;
+  opacity: 0.95;
+}
+
+.stat__value {
+  font-size: 2rem;
+  font-weight: 500;
+}
+
+.stat--purple {
+  background: var(--purple);
+}
+
+.stat--green {
+  background: var(--mint);
+}
+
+.stat--pink {
+  background: var(--hot-pink);
+}
+
+.kb-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 1.5rem 0;
+}
+
+.kb-head h2 {
+  font-size: 1.6rem;
+  margin: 0;
+}
+
+.dropzone {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  margin: 1rem 1.5rem;
+  padding: 2rem;
+  border: 3px dashed var(--purple);
+  border-radius: var(--radius-lg);
+  background: var(--purple-soft);
+  color: var(--purple);
+  font-size: 1.1rem;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.doc-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 0 1.5rem 1rem;
+}
+
+.doc-empty {
+  color: var(--navy);
+  opacity: 0.7;
+  font-size: 1.05rem;
+}
+
+.doc-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 18px;
+  border: 2px solid var(--navy);
+  border-radius: var(--radius-md);
+  background: #fff;
+}
+
+.doc-row__name {
+  font-size: 1.1rem;
+  font-weight: 500;
+}
+
+.doc-row__status {
+  color: var(--mint);
+  font-weight: 500;
+  font-size: 0.95rem;
+}
+
+.preview-panel {
+  margin: 0.5rem 1.5rem 1.5rem;
+  padding: 1.5rem;
+  border-radius: var(--radius-lg);
+  background: var(--teal);
+}
+
+.preview-panel__title {
+  font-size: 1.6rem;
+  margin: 0;
+  color: var(--teal-ink);
+}
+
+.preview-panel__sub {
+  margin: 0.25rem 0 1rem;
+  color: var(--teal-ink);
+  font-size: 1.05rem;
+}
+
+.chat {
+  background: #fff;
+  border: 2px solid var(--navy);
+  border-radius: var(--radius-lg);
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-height: 80px;
+  margin-bottom: 12px;
+}
+
+.chat__hint {
+  color: var(--navy);
+  opacity: 0.7;
+  font-size: 1rem;
+  margin: 0;
+}
+
+.bubble {
+  padding: 12px 16px;
+  border-radius: var(--radius-lg);
+  font-size: 1.05rem;
+  max-width: 85%;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.bubble--user {
+  align-self: flex-end;
+  background: var(--purple);
+  color: #fff;
+}
+
+.bubble--bot {
+  align-self: flex-start;
+  background: var(--purple-soft);
+  color: var(--navy);
+}
+
+.bubble__sources {
+  font-size: 0.85rem;
+  opacity: 0.8;
+  font-weight: 500;
+}
+
+.chat-form {
+  display: flex;
+  gap: 10px;
+}
+
+.chat-form input {
+  flex: 1;
+  font: inherit;
+  padding: 12px 14px;
+  border: 2px solid var(--navy);
+  border-radius: var(--radius-md);
+  background: #fff;
+  color: var(--navy);
+}
+
+.chat-form input:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(108, 74, 214, 0.3);
+}
+
+.dash-footer {
+  text-align: center;
+  background: var(--navy);
+  color: #fff;
+  padding: 1.25rem;
+  border-radius: var(--radius-lg);
+  margin: 1.5rem 0 4rem;
+  font-size: 1rem;
+}
+
+/* Responsive --------------------------------------------------- */
+
+@media (max-width: 700px) {
+  .feature-grid,
+  .pricing-grid,
+  .stat-grid,
+  .biz-grid {
+    grid-template-columns: 1fr;
+  }
+  .hero__title {
+    font-size: 2.8rem;
+  }
+  .hero__lead {
+    font-size: 1.3rem;
+  }
+  .dash-title {
+    font-size: 2rem;
+  }
+}
+
+/* ──────────────────────────────────────────────────────────────
+   EXAMPLES — The Grumpy Bean themed showcase site
+   ────────────────────────────────────────────────────────────── */
+
+.bean {
+  min-height: 100vh;
+  background: var(--pink-bg);
+}
+
+.bean-nav {
+  background: var(--purple);
+  padding: 18px 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.bean-nav__brand {
+  color: #fff;
+  font-size: 1.5rem;
+  font-weight: 500;
+}
+
+.bean-nav__links {
+  display: flex;
+  gap: 24px;
+  align-items: center;
+}
+
+.bean-nav__links span {
+  color: #fff;
+  font-size: 1.1rem;
+  opacity: 0.85;
+  cursor: pointer;
+}
+
+.bean-nav__active {
+  opacity: 1 !important;
+  border-bottom: 3px solid var(--yellow);
+  padding-bottom: 2px;
+}
+
+.bean-hero {
+  background: var(--hot-pink);
+  text-align: center;
+  padding: 3.5rem 1.5rem;
+  color: #fff;
+}
+
+.bean-hero__eyebrow {
+  letter-spacing: 0.1em;
+  font-size: 1rem;
+  margin: 0 0 1rem;
+  opacity: 0.95;
+}
+
+.bean-hero__title {
+  font-size: 3.4rem;
+  line-height: 1.05;
+  color: #fff;
+  margin: 0 auto 1rem;
+  max-width: 640px;
+}
+
+.bean-hero__sub {
+  font-size: 1.5rem;
+  margin: 0;
+}
+
+.bean-body {
+  max-width: 1380px;
+  margin: 0 auto;
+  padding: 2.5rem 1.5rem;
+}
+
+.bean-section-title {
+  font-size: 2.2rem;
+  margin: 1.5rem 0 1.25rem;
+}
+
+.bean-menu-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  margin-bottom: 1rem;
+}
+
+.bean-menu-card {
+  background: #fff;
+  border: 3px solid var(--navy);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+}
+
+.bean-menu-card h3 {
+  font-size: 1.5rem;
+  margin: 0 0 0.5rem;
+}
+
+.bean-menu-card__desc {
+  color: var(--purple);
+  font-size: 1.1rem;
+  margin: 0 0 1rem;
+}
+
+.bean-menu-card__price {
+  font-size: 1.8rem;
+  font-weight: 500;
+  color: var(--hot-pink);
+  margin: 0;
+}
+
+.bean-menu-card__price--free {
+  color: var(--mint);
+}
+
+.bean-rules {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.bean-rule {
+  border-radius: var(--radius-pill);
+  padding: 16px 26px;
+  color: #fff;
+  font-size: 1.2rem;
+}
+
+.bean-rule strong {
+  color: var(--yellow);
+}
+
+.bean-rule--purple {
+  background: var(--purple);
+}
+
+.bean-rule--green {
+  background: var(--mint);
+}
+
+.bean-rule--pink {
+  background: var(--hot-pink);
+}
+
+.bean-ask {
+  background: var(--teal);
+  text-align: center;
+  padding: 3rem 1.5rem;
+}
+
+.bean-ask__title {
+  font-size: 2.4rem;
+  color: var(--teal-ink);
+  margin: 0 0 0.5rem;
+}
+
+.bean-ask__sub {
+  font-size: 1.2rem;
+  color: var(--teal-ink);
+  margin: 0 0 1.5rem;
+}
+
+.bean-chat {
+  max-width: 1340px;
+  margin: 0 auto;
+  background: #fff;
+  border: 3px solid var(--navy);
+  border-radius: var(--radius-lg);
+  padding: 1.25rem;
+}
+
+.bean-chat__window {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  text-align: left;
+  margin-bottom: 1rem;
+}
+
+.chip-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.chip {
+  background: #fff;
+  border: 2px solid var(--purple);
+  color: var(--purple);
+  font: inherit;
+  font-size: 1rem;
+  padding: 8px 16px;
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+}
+
+.chip:hover {
+  background: var(--purple-soft);
+}
+
+.bean-chat__form {
+  display: flex;
+  gap: 10px;
+}
+
+.bean-chat__form input {
+  flex: 1;
+  font: inherit;
+  font-size: 1.1rem;
+  padding: 14px 16px;
+  border: 2px solid var(--navy);
+  border-radius: var(--radius-pill);
+  background: var(--purple-soft);
+  color: var(--navy);
+}
+
+.bean-chat__form input:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(108, 74, 214, 0.3);
+}
+
+.bean-chat__send {
+  width: 52px;
+  border: none;
+  border-radius: 50%;
+  background: var(--yellow);
+  color: var(--navy);
+  font-size: 1.3rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.bean-chat__send:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.bean-footer {
+  background: var(--navy);
+  color: #fff;
+  text-align: center;
+  padding: 1.5rem;
+  font-size: 1.05rem;
 }
 
 @media (max-width: 700px) {
-  .pricing-grid {
+  .bean-menu-grid {
     grid-template-columns: 1fr;
+  }
+  .bean-hero__title {
+    font-size: 2.8rem;
+  }
+  .bean-nav__links {
+    display: none;
   }
 }
