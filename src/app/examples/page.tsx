@@ -24,6 +24,14 @@ const ExamplesPage = async (): Promise<React.ReactElement> => {
         </div>
       </nav>
 
+      <section className="quote-band">
+        <p className="quote-band__text">
+          <span className="quote-band__mark quote-band__mark--open">"</span>
+          Building a landing page for class? Build it with style — add a chatbot.
+          <span className="quote-band__mark quote-band__mark--close">"</span>
+        </p>
+      </section>
+
       <section className="bean-hero">
         <p className="bean-hero__eyebrow">EST. WHENEVER · OPEN TIL WE&apos;RE TIRED</p>
         <h1 className="bean-hero__title">Coffee with a little attitude.</h1>
