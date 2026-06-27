@@ -20,7 +20,7 @@ const HomePage = async (): Promise<React.ReactElement> => {
               Add a working AI chatbot to your project — before you&apos;ve learned how to build one.
             </h1>
             <p className="hero__lead">
-              Built for cohort students, Vibe Fridays, and portfolio projects.
+              Built for cohort students, new coders, new entreprenuers, Vibe Fridays, and portfolio projects.
               Upload your project&apos;s docs, get an embeddable bot, paste it on your landing page.
             </p>
             <div className="hero__actions">

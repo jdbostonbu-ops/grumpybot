@@ -5,7 +5,8 @@
 <h1 align="center">GrumpyBot</h1>
 
 <p align="center">
-  A RAG handbook-bot platform. Upload your project's docs, get an embeddable bot, paste it on your landing page.
+  <b>For students, new coders, and new entrepreneurs.</b><br/>
+  Your first bot in under 5 minutes. Built for portfolios, demos, real clients, and Vibe Fridays. Upload your project's docs, get an embeddable bot, paste it on your landing page.
 </p>
 
 <p align="center">
