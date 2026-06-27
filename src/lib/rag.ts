@@ -74,6 +74,41 @@ const answerQuestion = async (
   return { answer, sources: uniqueSources(chunks) };
 };
 
+const streamAnswer = async (
+  botId: string,
+  question: string,
+): Promise<{ sources: string[]; stream: AsyncIterable<string> }> => {
+  const chunks = await retrieval.searchChunks(botId, question, TOP_K);
+  if (chunks.length === 0) {
+    const fallback = async function* (): AsyncGenerator<string> {
+      yield 'I could not find anything about that in the documents, so I cannot answer it.';
+    };
+    return { sources: [], stream: fallback() };
+  }
+  const context = buildContext(chunks);
+  const completionStream = await openai.getClient().chat.completions.create({
+    model: CHAT_MODEL,
+    messages: [
+      { role: 'system', content: SYSTEM_PROMPT },
+      {
+        role: 'user',
+        content: `Context:\n${context}\n\nQuestion: ${question}`,
+      },
+    ],
+    stream: true,
+  });
+  const textStream = async function* (): AsyncGenerator<string> {
+    for await (const part of completionStream) {
+      const delta = part.choices[0]?.delta?.content;
+      if (typeof delta === 'string' && delta !== '') {
+        yield delta;
+      }
+    }
+  };
+  return { sources: uniqueSources(chunks), stream: textStream() };
+};
+
 export const rag = {
   answerQuestion,
+  streamAnswer,
 };

@@ -21,6 +21,67 @@ export const EmbedChat = (props: EmbedChatProps): React.ReactElement => {
     props.greeting ??
     'Ask me anything about this project — I only answer from the uploaded documents.';
 
+  const appendToLastBotMessage = (text: string, sources?: string[]): void => {
+    setMessages((current) => {
+      const updated = [...current];
+      const lastIndex = updated.length - 1;
+      const last = updated[lastIndex];
+      if (last !== undefined && last.role === 'bot') {
+        updated[lastIndex] = {
+          ...last,
+          text,
+          sources: sources ?? last.sources,
+        };
+      }
+      return updated;
+    });
+  };
+
+  const consumeStream = async (body: ReadableStream<Uint8Array>): Promise<void> => {
+    const reader = body.getReader();
+    const decoder = new TextDecoder();
+    let buffer = '';
+    let accumulatedText = '';
+    let latestSources: string[] = [];
+    setMessages((current) => [...current, { role: 'bot', text: '' }]);
+    setIsAsking(false);
+    while (true) {
+      const { value, done } = await reader.read();
+      if (done) {
+        break;
+      }
+      buffer += decoder.decode(value, { stream: true });
+      const lines = buffer.split('\n');
+      buffer = lines.pop() ?? '';
+      for (const line of lines) {
+        if (line === '') {
+          continue;
+        }
+        try {
+          const parsed = JSON.parse(line) as {
+            sources?: string[];
+            text?: string;
+            done?: boolean;
+            error?: string;
+          };
+          if (Array.isArray(parsed.sources)) {
+            latestSources = parsed.sources;
+          }
+          if (typeof parsed.text === 'string' && parsed.text !== '') {
+            for (const char of parsed.text) {
+              accumulatedText += char;
+              appendToLastBotMessage(accumulatedText);
+              await new Promise<void>((resolve) => setTimeout(resolve, 18));
+            }
+          }
+        } catch {
+          // skip malformed line
+        }
+      }
+    }
+    appendToLastBotMessage(accumulatedText, latestSources);
+  };
+
   const ask = async (question: string): Promise<void> => {
     const trimmed = question.trim();
     if (trimmed === '' || isAsking) {
@@ -34,6 +95,15 @@ export const EmbedChat = (props: EmbedChatProps): React.ReactElement => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ botId: props.botId, question: trimmed }),
       });
+      const contentType = response.headers.get('Content-Type') ?? '';
+      if (
+        response.ok &&
+        response.body !== null &&
+        contentType.includes('application/x-ndjson')
+      ) {
+        await consumeStream(response.body);
+        return;
+      }
       const data = (await response.json().catch(() => null)) as
         | { answer?: string; sources?: string[]; error?: string }
         | null;

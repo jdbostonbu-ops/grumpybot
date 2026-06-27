@@ -61,7 +61,7 @@ const PricingPage = async (): Promise<React.ReactElement> => {
             <div className="card price-card">
               <h3 className="price-card__name">Business</h3>
               <p className="price-card__price">
-                $19<span className="price-card__per">/mo</span>
+                $49<span className="price-card__per">/mo</span>
               </p>
               <p className="price-card__tagline">For instructors, small teams, anyone past school.</p>
               <ul className="price-card__list">
