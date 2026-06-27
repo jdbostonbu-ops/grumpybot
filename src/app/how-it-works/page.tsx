@@ -63,8 +63,11 @@ const HowItWorksPage = async (): Promise<React.ReactElement> => {
           <div className="callout">
             <h2 className="callout__title">The best part: it only knows what you tell it</h2>
             <p className="callout__text">
-              Ask the Grumpy Bean bot for the wifi password and it&apos;ll refuse —
-              because it&apos;s not in the handbook. Grounded answers, every time.
+              Your bot answers from your project docs and nothing else. If the
+              answer isn&apos;t in what you uploaded, it says &quot;I could not find it in
+              the documents&quot; instead of making something up. No hallucinations,
+              no off-topic answers — perfect for portfolios where you want visitors
+              to learn about your work.
             </p>
           </div>
         </div>
@@ -72,6 +75,7 @@ const HowItWorksPage = async (): Promise<React.ReactElement> => {
         <section className="band band--yellow">
           <div className="band__inner">
             <h2>See it in action</h2>
+            <p className="band__sub">Don&apos;t want to use excessive tokens building a RAG? Don&apos;t know how to yet?</p>
             <Link href="/examples" className="btn btn--dark">
               Try the Grumpy Bean example
             </Link>
