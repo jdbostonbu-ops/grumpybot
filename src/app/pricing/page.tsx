@@ -25,45 +25,45 @@ const PricingPage = async (): Promise<React.ReactElement> => {
             <div className="card price-card">
               <h3 className="price-card__name">Starter</h3>
               <p className="price-card__price">
-                $0<span className="price-card__per">/mo</span>
+                $5<span className="price-card__per">/mo</span>
               </p>
               <p className="price-card__tagline">For trying it out.</p>
               <ul className="price-card__list">
                 <li>1 bot</li>
-                <li>Up to 10 documents</li>
+                <li>5 documents</li>
                 <li>Grounded answers with sources</li>
-                <li>Live preview</li>
+                <li>Shareable link</li>
               </ul>
               <Link href="/dashboard" className="btn btn--outline price-card__cta">
-                Start free
+                Start with Starter
               </Link>
             </div>
 
             <div className="card price-card price-card--featured">
               <span className="price-card__badge">★ Most popular</span>
-              <h3 className="price-card__name">Pro</h3>
+              <h3 className="price-card__name">Student</h3>
               <p className="price-card__price">
-                $19<span className="price-card__per">/mo</span>
+                $10<span className="price-card__per">/mo</span>
               </p>
-              <p className="price-card__tagline">For real businesses.</p>
+              <p className="price-card__tagline">For cohort students with portfolio projects.</p>
               <ul className="price-card__list">
-                <li>Up to 5 bots</li>
+                <li>7 bots (one per class)</li>
                 <li>Unlimited documents</li>
                 <li>Embed on your site</li>
                 <li>Custom colors</li>
-                <li>Priority support</li>
+                <li>Token costs included</li>
               </ul>
               <Link href="/dashboard" className="btn btn--primary price-card__cta">
-                Get Pro
+                Go Student
               </Link>
             </div>
 
             <div className="card price-card">
               <h3 className="price-card__name">Business</h3>
               <p className="price-card__price">
-                $49<span className="price-card__per">/mo</span>
+                $19<span className="price-card__per">/mo</span>
               </p>
-              <p className="price-card__tagline">For teams &amp; chains.</p>
+              <p className="price-card__tagline">For instructors, small teams, anyone past school.</p>
               <ul className="price-card__list">
                 <li>Unlimited bots</li>
                 <li>Team accounts</li>
@@ -71,14 +71,13 @@ const PricingPage = async (): Promise<React.ReactElement> => {
                 <li>Priority support</li>
               </ul>
               <Link href="/dashboard" className="btn btn--dark price-card__cta">
-                Contact us
+                Get Business
               </Link>
             </div>
           </div>
           <p className="pricing-note">
             All plans include grounded answers, source citations, and the
-            no-making-stuff-up guarantee. Multiple bots and team features are on the
-            roadmap; today every account includes one fully working bot.
+            no-making-stuff-up guarantee. Token costs included on every plan.
           </p>
         </div>
 
