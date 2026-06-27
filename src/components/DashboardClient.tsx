@@ -307,7 +307,20 @@ export const DashboardClient = (props: DashboardClientProps): React.ReactElement
       <section className="dash-header-band">
         <div className="dash-header-band__inner">
           <p className="dash-eyebrow">Dashboard</p>
-          <h1 className="dash-h1">Your bot is live 🎉</h1>
+          <h1 className="dash-h1">
+            Your bot is live{' '}
+            <span className="confetti-trigger">
+              <span className="confetti-emoji">🎉</span>
+              <span className="confetti-piece" aria-hidden="true"></span>
+              <span className="confetti-piece" aria-hidden="true"></span>
+              <span className="confetti-piece" aria-hidden="true"></span>
+              <span className="confetti-piece" aria-hidden="true"></span>
+              <span className="confetti-piece" aria-hidden="true"></span>
+              <span className="confetti-piece" aria-hidden="true"></span>
+              <span className="confetti-piece" aria-hidden="true"></span>
+              <span className="confetti-piece" aria-hidden="true"></span>
+            </span>
+          </h1>
           <p className="dash-meta">
             Answering from {docs.length} document{docs.length === 1 ? '' : 's'} ·{' '}
             {chunkCount} chunk{chunkCount === 1 ? '' : 's'} indexed
@@ -744,7 +757,7 @@ export const DashboardClient = (props: DashboardClientProps): React.ReactElement
                   <>
                     <h3 className="inquiry-card__back-title">Thank you!</h3>
                     <p className="inquiry-card__back-sub">
-                      Your submission has been received. We&apos;re getting Grumpy for you!
+                      Your submission has been received. <br />We&apos;re getting Grumpy for you!
                     </p>
                   </>
                 ) : (
