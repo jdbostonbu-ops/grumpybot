@@ -9,7 +9,7 @@ import { SESSION_COOKIE_NAME } from '@/lib/session-cookie';
 // the presence of the session cookie. The cryptographic verification + the
 // database-backed check happen server-side in pages/route handlers (layer 2).
 
-const PUBLIC_PATHS = ['/login', '/signup', '/verify', '/reset-request', '/reset-confirm'];
+const PUBLIC_PATHS = ['/login', '/signup', '/verify', '/reset-request', '/reset-confirm', '/embed'];
 
 const isPublic = (pathname: string): boolean =>
   PUBLIC_PATHS.some(
