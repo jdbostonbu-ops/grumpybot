@@ -15,6 +15,8 @@ type ChatMessage = {
 
 type DashboardClientProps = {
   botName: string;
+  botId: string;
+  embedUrl: string;
   initialDocs: DocItem[];
   initialChunkCount: number;
 };
@@ -323,9 +325,50 @@ export const DashboardClient = (props: DashboardClientProps): React.ReactElement
           <div className="dash-panel dash-panel--green">
             <h3 className="dash-panel__title">🔗 Share / embed</h3>
             <p className="dash-panel__sub">
-              Sharing &amp; embedding are on the roadmap — your bot answers live in
-              the preview today.
+              Share the link anywhere, or paste the embed into your site code.
             </p>
+
+            <label htmlFor="embed-url" className="embed-field__label">
+              Public link
+            </label>
+            <div className="embed-field">
+              <input
+                id="embed-url"
+                type="text"
+                readOnly
+                value={props.embedUrl}
+                className="embed-field__input"
+                onFocus={(event) => event.currentTarget.select()}
+              />
+              <button
+                type="button"
+                className="embed-field__copy"
+                onClick={() => { void navigator.clipboard.writeText(props.embedUrl); }}
+              >
+                Copy
+              </button>
+            </div>
+
+            <label htmlFor="embed-iframe" className="embed-field__label">
+              Embed snippet
+            </label>
+            <div className="embed-field">
+              <input
+                id="embed-iframe"
+                type="text"
+                readOnly
+                value={`<iframe src="${props.embedUrl}" width="380" height="540" style="border:0"></iframe>`}
+                className="embed-field__input"
+                onFocus={(event) => event.currentTarget.select()}
+              />
+              <button
+                type="button"
+                className="embed-field__copy"
+                onClick={() => { void navigator.clipboard.writeText(`<iframe src="${props.embedUrl}" width="380" height="540" style="border:0"></iframe>`); }}
+              >
+                Copy
+              </button>
+            </div>
           </div>
         </div>
       </div>

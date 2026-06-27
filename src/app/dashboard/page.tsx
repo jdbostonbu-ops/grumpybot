@@ -3,6 +3,7 @@ import { getSessionUserId } from '@/lib/session';
 import { prisma } from '@/lib/prisma';
 import { bots } from '@/lib/bot';
 import { NavBar } from '@/components/NavBar';
+import { headers } from 'next/headers';
 import { DashboardClient } from '@/components/DashboardClient';
 
 // Layer 2 protection: re-verify the session server-side before rendering.
@@ -29,11 +30,18 @@ const DashboardPage = async (): Promise<React.ReactElement> => {
     where: { document: { botId: bot.id } },
   });
 
+  const headerList = await headers();
+  const host = headerList.get('host') ?? 'localhost:3000';
+  const protocol = host.startsWith('localhost') ? 'http' : 'https';
+  const embedUrl = `${protocol}://${host}/embed/${bot.id}`;
+
   return (
     <div className="page">
       <NavBar />
       <DashboardClient
         botName={bot.name}
+        botId={bot.id}
+        embedUrl={embedUrl}
         initialDocs={documents}
         initialChunkCount={chunkCount}
       />
