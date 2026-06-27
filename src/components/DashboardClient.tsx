@@ -60,6 +60,17 @@ export const DashboardClient = (props: DashboardClientProps): React.ReactElement
   const [themeStatus, setThemeStatus] = useState<'' | 'saving' | 'saved'>('');
   const [themeError, setThemeError] = useState('');
   const [showCustomTheme, setShowCustomTheme] = useState(false);
+  const [showInquiry, setShowInquiry] = useState(false);
+  const [inquiryName, setInquiryName] = useState('');
+  const [inquiryEmail, setInquiryEmail] = useState('');
+  const [inquiryPhone, setInquiryPhone] = useState('');
+  const [inquiryRagType, setInquiryRagType] = useState('');
+  const [inquiryAudience, setInquiryAudience] = useState('');
+  const [inquiryProject, setInquiryProject] = useState('');
+  const [inquiryGoals, setInquiryGoals] = useState('');
+  const [inquiryDeadline, setInquiryDeadline] = useState('');
+  const [inquiryStatus, setInquiryStatus] = useState<'' | 'sending' | 'sent' | 'error'>('');
+  const [inquiryError, setInquiryError] = useState('');
 
   const uploadFile = async (file: File): Promise<void> => {
     setUploadError('');
@@ -146,6 +157,43 @@ export const DashboardClient = (props: DashboardClientProps): React.ReactElement
     } catch {
       setThemeError('Could not save colors. Please try again.');
       setThemeStatus('');
+    }
+  };
+
+  const submitInquiry = async (event: FormEvent<HTMLFormElement>): Promise<void> => {
+    event.preventDefault();
+    if (inquiryStatus === 'sending') {
+      return;
+    }
+    setInquiryStatus('sending');
+    setInquiryError('');
+    try {
+      const response = await fetch('/api/inquiry', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: inquiryName,
+          email: inquiryEmail,
+          phone: inquiryPhone,
+          ragType: inquiryRagType,
+          audience: inquiryAudience,
+          project: inquiryProject,
+          goals: inquiryGoals,
+          deadline: inquiryDeadline,
+        }),
+      });
+      const data = (await response.json().catch(() => null)) as
+        | { error?: string }
+        | null;
+      if (!response.ok) {
+        setInquiryError(data?.error ?? 'Could not send. Try again.');
+        setInquiryStatus('error');
+        return;
+      }
+      setInquiryStatus('sent');
+    } catch {
+      setInquiryError('Could not send. Try again.');
+      setInquiryStatus('error');
     }
   };
 
@@ -679,11 +727,140 @@ export const DashboardClient = (props: DashboardClientProps): React.ReactElement
             <p className="band__body">
               Tell us about your project. We&apos;ll send you ready-to-paste code for your site.
             </p>
-            <button type="button" className="btn btn--dark band__cta">
-              Start project inquiry →
+            <button
+              type="button"
+              className="btn btn--dark band__cta"
+              onClick={() => { setShowInquiry((v) => !v); }}
+            >
+              {showInquiry ? 'Hide form ↑' : 'Start project inquiry →'}
             </button>
           </div>
         </section>
+        {showInquiry ? (
+          <section className="inquiry-wrap is-open">
+            <div className="inquiry-card">
+              <div className="inquiry-card__back">
+                <h3 className="inquiry-card__back-title">GrumpyBot</h3>
+                <p className="inquiry-card__back-sub">we&apos;ll get back to you</p>
+              </div>
+              <div className="inquiry-card__front">
+                {inquiryStatus === 'sent' ? (
+                  <div className="inquiry-form__success">
+                    <h3 className="inquiry-form__title">Thanks!</h3>
+                    <p>We&apos;ll get back to you within 48 hours.</p>
+                  </div>
+                ) : (
+                  <form onSubmit={submitInquiry}>
+                    <h3 className="inquiry-form__title">Tell us about your project</h3>
+
+                    <div className="inquiry-form__grid">
+                      <div>
+                        <label htmlFor="inq-name" className="embed-field__label">Name</label>
+                        <input
+                          id="inq-name"
+                          type="text"
+                          required
+                          value={inquiryName}
+                          onChange={(event) => { setInquiryName(event.target.value); }}
+                          className="embed-field__input"
+                        />
+                      </div>
+                      <div>
+                        <label htmlFor="inq-email" className="embed-field__label">Email</label>
+                        <input
+                          id="inq-email"
+                          type="email"
+                          required
+                          value={inquiryEmail}
+                          onChange={(event) => { setInquiryEmail(event.target.value); }}
+                          className="embed-field__input"
+                        />
+                      </div>
+                      <div>
+                        <label htmlFor="inq-phone" className="embed-field__label">Phone</label>
+                        <input
+                          id="inq-phone"
+                          type="tel"
+                          value={inquiryPhone}
+                          onChange={(event) => { setInquiryPhone(event.target.value); }}
+                          className="embed-field__input"
+                        />
+                      </div>
+                      <div>
+                        <label htmlFor="inq-deadline" className="embed-field__label">Deadline</label>
+                        <input
+                          id="inq-deadline"
+                          type="text"
+                          value={inquiryDeadline}
+                          onChange={(event) => { setInquiryDeadline(event.target.value); }}
+                          placeholder="e.g. end of August"
+                          className="embed-field__input"
+                        />
+                      </div>
+                    </div>
+
+                    <label htmlFor="inq-rag" className="embed-field__label">RAG type</label>
+                    <select
+                      id="inq-rag"
+                      required
+                      value={inquiryRagType}
+                      onChange={(event) => { setInquiryRagType(event.target.value); }}
+                      className="embed-field__input"
+                    >
+                      <option value="">Pick one…</option>
+                      <option value="multimodal">Multimodal RAG (reads images)</option>
+                      <option value="agentic">Agentic RAG (multi-step reasoning)</option>
+                      <option value="voice">Voice RAG (talk to your bot)</option>
+                      <option value="other">Other / not sure</option>
+                    </select>
+
+                    <label htmlFor="inq-audience" className="embed-field__label">Audience</label>
+                    <input
+                      id="inq-audience"
+                      type="text"
+                      required
+                      value={inquiryAudience}
+                      onChange={(event) => { setInquiryAudience(event.target.value); }}
+                      placeholder="Who will use this bot?"
+                      className="embed-field__input"
+                    />
+
+                    <label htmlFor="inq-project" className="embed-field__label">Tell us about your project</label>
+                    <textarea
+                      id="inq-project"
+                      required
+                      rows={4}
+                      value={inquiryProject}
+                      onChange={(event) => { setInquiryProject(event.target.value); }}
+                      className="embed-field__input inquiry-form__textarea"
+                    />
+
+                    <label htmlFor="inq-goals" className="embed-field__label">What you want it to do</label>
+                    <textarea
+                      id="inq-goals"
+                      required
+                      rows={4}
+                      value={inquiryGoals}
+                      onChange={(event) => { setInquiryGoals(event.target.value); }}
+                      className="embed-field__input inquiry-form__textarea"
+                    />
+
+                    <button
+                      type="submit"
+                      className="btn btn--dark inquiry-form__submit"
+                      disabled={inquiryStatus === 'sending'}
+                    >
+                      {inquiryStatus === 'sending' ? 'Sending…' : 'Send inquiry'}
+                    </button>
+                    {inquiryError !== '' ? (
+                      <p className="slug-error">{inquiryError}</p>
+                    ) : null}
+                  </form>
+                )}
+              </div>
+            </div>
+          </section>
+        ) : null}
       </div>
     </div>
   );
