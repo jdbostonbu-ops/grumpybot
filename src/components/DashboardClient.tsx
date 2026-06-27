@@ -28,6 +28,7 @@ type DashboardClientProps = {
   initialDocs: DocItem[];
   initialChunkCount: number;
   initialTheme: InitialTheme;
+  initialStreamingEnabled: boolean;
 };
 
 export const DashboardClient = (props: DashboardClientProps): React.ReactElement => {
@@ -56,6 +57,9 @@ export const DashboardClient = (props: DashboardClientProps): React.ReactElement
   );
   const [themeAccent, setThemeAccent] = useState(
     props.initialTheme.accent ?? DEFAULT_THEME.accent,
+  );
+  const [streamingEnabled, setStreamingEnabled] = useState<boolean>(
+    props.initialStreamingEnabled,
   );
   const [themeStatus, setThemeStatus] = useState<'' | 'saving' | 'saved'>('');
   const [themeError, setThemeError] = useState('');
@@ -159,7 +163,22 @@ export const DashboardClient = (props: DashboardClientProps): React.ReactElement
       setThemeStatus('');
     }
   };
-
+  const saveStreaming = async (next: boolean): Promise<void> => {
+    const previous = streamingEnabled;
+    setStreamingEnabled(next);
+    try {
+      const response = await fetch('/api/bot/theme', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ streamingEnabled: next }),
+      });
+      if (!response.ok) {
+        setStreamingEnabled(previous);
+      }
+    } catch {
+      setStreamingEnabled(previous);
+    }
+  };
   const submitInquiry = async (event: FormEvent<HTMLFormElement>): Promise<void> => {
     event.preventDefault();
     if (inquiryStatus === 'sending') {
@@ -646,7 +665,22 @@ export const DashboardClient = (props: DashboardClientProps): React.ReactElement
                 : 'Save colors'}
             </button>
             {themeError !== '' ? <p className="slug-error">{themeError}</p> : null}
-
+            <div className="streaming-toggle">
+              <div>
+                <h4 className="streaming-toggle__title">Streaming responses</h4>
+                <p className="streaming-toggle__desc">
+                  Make answers type out word-by-word, like ChatGPT. Try it in the preview chat above.
+                </p>
+              </div>
+              <button
+                type="button"
+                className={streamingEnabled ? 'streaming-switch is-on' : 'streaming-switch'}
+                onClick={() => { void saveStreaming(!streamingEnabled); }}
+                aria-pressed={streamingEnabled}
+              >
+                {streamingEnabled ? 'On' : 'Off'}
+              </button>
+            </div>
             <label htmlFor="bot-slug" className="embed-field__label">
               Bot slug
             </label>
