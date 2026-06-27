@@ -25,6 +25,38 @@ const sendCodeEmail = async (
   });
 };
 
+type InquiryPayload = {
+  name: string;
+  email: string;
+  phone: string;
+  ragType: string;
+  audience: string;
+  project: string;
+  goals: string;
+  deadline: string;
+};
+
+const formatInquiryBody = (data: InquiryPayload): string => {
+  return [
+    `New project inquiry`,
+    ``,
+    `Name: ${data.name}`,
+    `Email: ${data.email}`,
+    `Phone: ${data.phone === '' ? '(not provided)' : data.phone}`,
+    `RAG type: ${data.ragType}`,
+    `Deadline: ${data.deadline === '' ? '(not provided)' : data.deadline}`,
+    ``,
+    `Audience:`,
+    data.audience,
+    ``,
+    `Project description:`,
+    data.project,
+    ``,
+    `What they want it to do:`,
+    data.goals,
+  ].join('\n');
+};
+
 export const email = {
   sendVerificationCode: async (to: string, code: string): Promise<void> => {
     await sendCodeEmail(
@@ -41,5 +73,14 @@ export const email = {
       'Use the code below to reset your password.',
       code,
     );
+  },
+  sendInquiry: async (data: InquiryPayload): Promise<void> => {
+    await getClient().send({
+      from: env.emailFrom,
+      to: 'inquiry@grumpybot.fyi',
+      replyTo: data.email,
+      subject: `New project inquiry from ${data.name}`,
+      text: formatInquiryBody(data),
+    });
   },
 };

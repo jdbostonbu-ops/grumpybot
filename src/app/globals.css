@@ -1739,6 +1739,10 @@ a {
 .inquiry-card {
   position: relative;
   transform-style: preserve-3d;
+  transition: transform 0.8s ease;
+}
+.inquiry-card.is-flipped {
+  transform: rotateY(180deg);
 }
 .inquiry-wrap.is-open .inquiry-card {
   animation: inquiry-spin-in 1.1s ease-out;

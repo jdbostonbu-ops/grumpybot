@@ -738,19 +738,24 @@ export const DashboardClient = (props: DashboardClientProps): React.ReactElement
         </section>
         {showInquiry ? (
           <section className="inquiry-wrap is-open">
-            <div className="inquiry-card">
+            <div className={inquiryStatus === 'sent' ? 'inquiry-card is-flipped' : 'inquiry-card'}>
               <div className="inquiry-card__back">
-                <h3 className="inquiry-card__back-title">GrumpyBot</h3>
-                <p className="inquiry-card__back-sub">we&apos;ll get back to you</p>
+                {inquiryStatus === 'sent' ? (
+                  <>
+                    <h3 className="inquiry-card__back-title">Thank you!</h3>
+                    <p className="inquiry-card__back-sub">
+                      Your submission has been received. We&apos;re getting Grumpy for you!
+                    </p>
+                  </>
+                ) : (
+                  <>
+                    <h3 className="inquiry-card__back-title">GrumpyBot</h3>
+                    <p className="inquiry-card__back-sub">we&apos;ll get back to you</p>
+                  </>
+                )}
               </div>
               <div className="inquiry-card__front">
-                {inquiryStatus === 'sent' ? (
-                  <div className="inquiry-form__success">
-                    <h3 className="inquiry-form__title">Thanks!</h3>
-                    <p>We&apos;ll get back to you within 48 hours.</p>
-                  </div>
-                ) : (
-                  <form onSubmit={submitInquiry}>
+                <form onSubmit={submitInquiry}>
                     <h3 className="inquiry-form__title">Tell us about your project</h3>
 
                     <div className="inquiry-form__grid">
@@ -856,7 +861,6 @@ export const DashboardClient = (props: DashboardClientProps): React.ReactElement
                       <p className="slug-error">{inquiryError}</p>
                     ) : null}
                   </form>
-                )}
               </div>
             </div>
           </section>
