@@ -1423,8 +1423,76 @@ a {
   font-weight: 600;
   cursor: pointer;
   font-family: inherit;
+  transition: transform 0.12s ease, background-color 0.15s ease, border-color 0.15s ease;
 }
-.embed-field__copy:hover {
+.embed-field__copy:hover:not(:disabled) {
   background: #6c4ad6;
   border-color: #6c4ad6;
+  transform: translateY(-1px);
+}
+.embed-field__copy:active:not(:disabled) {
+  transform: translateY(0);
+}
+.embed-field__copy:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Dashboard — slug editor error + success messages */
+.slug-error {
+  margin: 8px 0 0 0;
+  color: #ff5fa2;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+.slug-saved {
+  margin: 8px 0 0 0;
+  color: #fff4fa;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+/* Dashboard — yellow explainer band above Preview/Share row */
+.dash-explainer {
+  background: #ffd84d;
+  padding: 64px 32px;
+  margin: 48px 0;
+  width: 100%;
+}
+.dash-explainer__inner {
+  max-width: 1280px;
+  margin: 0 auto;
+}
+.dash-explainer__title {
+  font-size: 3rem;
+  font-weight: 700;
+  color: #2b2150;
+  text-align: center;
+  margin: 0 0 40px 0;
+  line-height: 1.1;
+}
+.dash-explainer__items {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 32px;
+}
+.dash-explainer__item-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #2b2150;
+  margin: 0 0 12px 0;
+}
+.dash-explainer__item-body {
+  font-size: 1rem;
+  line-height: 1.5;
+  color: #2b2150;
+  margin: 0;
+}
+.dash-explainer__item-body code {
+  background: #fff4fa;
+  padding: 2px 8px;
+  border-radius: 6px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.95rem;
+  border: 2px solid #2b2150;
 }

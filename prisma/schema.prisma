@@ -36,6 +36,7 @@ model Bot {
   id        String   @id @default(cuid())
   name      String
   theme     String?
+  slug      String?  @unique
   ownerId   String
   createdAt DateTime @default(now())
 

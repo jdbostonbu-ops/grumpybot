@@ -8,8 +8,8 @@ type EmbedPageProps = {
 const EmbedPage = async (props: EmbedPageProps): Promise<React.ReactElement> => {
   const { botId } = await props.params;
 
-  const bot = await prisma.bot.findUnique({
-    where: { id: botId },
+  const bot = await prisma.bot.findFirst({
+    where: { OR: [{ slug: botId }, { id: botId }] },
     select: { id: true, name: true },
   });
 

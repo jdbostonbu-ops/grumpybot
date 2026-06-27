@@ -16,6 +16,7 @@ type ChatMessage = {
 type DashboardClientProps = {
   botName: string;
   botId: string;
+  initialSlug: string;
   embedUrl: string;
   initialDocs: DocItem[];
   initialChunkCount: number;
@@ -31,6 +32,11 @@ export const DashboardClient = (props: DashboardClientProps): React.ReactElement
   const [pendingDeleteId, setPendingDeleteId] = useState<string | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
   const [deleteError, setDeleteError] = useState('');
+  const [slug, setSlug] = useState(props.initialSlug);
+  const [slugDraft, setSlugDraft] = useState(props.initialSlug);
+  const [slugError, setSlugError] = useState('');
+  const [slugStatus, setSlugStatus] = useState<'' | 'saving' | 'saved'>('');
+  const [copyStatus, setCopyStatus] = useState<'' | 'link' | 'embed'>('');
 
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [isAsking, setIsAsking] = useState(false);
@@ -84,6 +90,41 @@ export const DashboardClient = (props: DashboardClientProps): React.ReactElement
   const cancelDelete = (): void => {
     setPendingDeleteId(null);
     setDeleteError('');
+  };
+
+  const saveSlug = async (): Promise<void> => {
+    const trimmed = slugDraft.trim().toLowerCase();
+    if (trimmed === '') {
+      setSlugError('Enter a slug.');
+      return;
+    }
+    setSlugError('');
+    setSlugStatus('saving');
+    try {
+      const response = await fetch('/api/bot/slug', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ slug: trimmed }),
+      });
+      const data = (await response.json().catch(() => null)) as
+        | { ok?: boolean; slug?: string; error?: string }
+        | null;
+
+      if (!response.ok || data?.ok !== true) {
+        setSlugError(data?.error ?? 'Could not save slug.');
+        setSlugStatus('');
+        return;
+      }
+
+      const newSlug = data.slug ?? trimmed;
+      setSlug(newSlug);
+      setSlugDraft(newSlug);
+      setSlugStatus('saved');
+      setTimeout(() => { setSlugStatus(''); }, 1800);
+    } catch {
+      setSlugError('Could not save slug. Please try again.');
+      setSlugStatus('');
+    }
   };
 
   const confirmDelete = async (id: string): Promise<void> => {
@@ -273,6 +314,32 @@ export const DashboardClient = (props: DashboardClientProps): React.ReactElement
         </p>
       </section>
 
+      <section className="dash-explainer">
+        <div className="dash-explainer__inner">
+          <h2 className="dash-explainer__title">How to share your bot</h2>
+          <div className="dash-explainer__items">
+            <div className="dash-explainer__item">
+              <h3 className="dash-explainer__item-title">Bot slug</h3>
+              <p className="dash-explainer__item-body">
+                Pick a short custom name (like <code>muttstrut</code>). It becomes part of your bot&apos;s URL.
+              </p>
+            </div>
+            <div className="dash-explainer__item">
+              <h3 className="dash-explainer__item-title">Public link</h3>
+              <p className="dash-explainer__item-body">
+                The full URL to your bot&apos;s chat. Paste it anywhere a link can go: Instagram bio, email signature, QR code.
+              </p>
+            </div>
+            <div className="dash-explainer__item">
+              <h3 className="dash-explainer__item-title">Embed snippet</h3>
+              <p className="dash-explainer__item-body">
+                A line of code that puts your bot inside any website that lets you paste HTML.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <div className="dash-body">
         <div className="dash-split">
           <div className="dash-panel dash-panel--teal">
@@ -328,6 +395,34 @@ export const DashboardClient = (props: DashboardClientProps): React.ReactElement
               Share the link anywhere, or paste the embed into your site code.
             </p>
 
+            <label htmlFor="bot-slug" className="embed-field__label">
+              Bot slug
+            </label>
+            <div className="embed-field">
+              <input
+                id="bot-slug"
+                type="text"
+                value={slugDraft}
+                onChange={(event) => {
+                  setSlugDraft(event.target.value);
+                  setSlugStatus('');
+                }}
+                placeholder="your-slug"
+                autoComplete="off"
+                className="embed-field__input"
+              />
+              <button
+                type="button"
+                className="embed-field__copy"
+                onClick={() => void saveSlug()}
+                disabled={slugStatus === 'saving' || slugDraft.trim() === slug}
+              >
+                {slugStatus === 'saving' ? 'Saving…' : slugStatus === 'saved' ? 'Saved ✓' : 'Save'}
+              </button>
+            </div>
+            {slugError !== '' ? <p className="slug-error">{slugError}</p> : null}
+            {slugStatus === 'saved' ? <p className="slug-saved">Saved.</p> : null}
+
             <label htmlFor="embed-url" className="embed-field__label">
               Public link
             </label>
@@ -336,16 +431,21 @@ export const DashboardClient = (props: DashboardClientProps): React.ReactElement
                 id="embed-url"
                 type="text"
                 readOnly
-                value={props.embedUrl}
+                value={`${typeof window !== 'undefined' ? window.location.origin : ''}/embed/${slug !== '' ? slug : props.botId}`}
                 className="embed-field__input"
                 onFocus={(event) => event.currentTarget.select()}
               />
               <button
                 type="button"
                 className="embed-field__copy"
-                onClick={() => { void navigator.clipboard.writeText(props.embedUrl); }}
+                onClick={() => {
+                  const url = `${typeof window !== 'undefined' ? window.location.origin : ''}/embed/${slug !== '' ? slug : props.botId}`;
+                  void navigator.clipboard.writeText(url);
+                  setCopyStatus('link');
+                  setTimeout(() => { setCopyStatus(''); }, 1800);
+                }}
               >
-                Copy
+                {copyStatus === 'link' ? 'Copied!' : 'Copy'}
               </button>
             </div>
 
@@ -357,16 +457,21 @@ export const DashboardClient = (props: DashboardClientProps): React.ReactElement
                 id="embed-iframe"
                 type="text"
                 readOnly
-                value={`<iframe src="${props.embedUrl}" width="380" height="540" style="border:0"></iframe>`}
+                value={`<iframe src="${typeof window !== 'undefined' ? window.location.origin : ''}/embed/${slug !== '' ? slug : props.botId}" width="380" height="540" style="border:0"></iframe>`}
                 className="embed-field__input"
                 onFocus={(event) => event.currentTarget.select()}
               />
               <button
                 type="button"
                 className="embed-field__copy"
-                onClick={() => { void navigator.clipboard.writeText(`<iframe src="${props.embedUrl}" width="380" height="540" style="border:0"></iframe>`); }}
+                onClick={() => {
+                  const snippet = `<iframe src="${typeof window !== 'undefined' ? window.location.origin : ''}/embed/${slug !== '' ? slug : props.botId}" width="380" height="540" style="border:0"></iframe>`;
+                  void navigator.clipboard.writeText(snippet);
+                  setCopyStatus('embed');
+                  setTimeout(() => { setCopyStatus(''); }, 1800);
+                }}
               >
-                Copy
+                {copyStatus === 'embed' ? 'Copied!' : 'Copy'}
               </button>
             </div>
           </div>

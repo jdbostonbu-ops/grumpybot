@@ -19,8 +19,8 @@ export async function POST(request: Request): Promise<Response> {
     return Response.json({ error: 'Enter a question.' }, { status: 400 });
   }
 
-  const bot = await prisma.bot.findUnique({
-    where: { id: botId },
+  const bot = await prisma.bot.findFirst({
+    where: { OR: [{ slug: botId }, { id: botId }] },
     select: { id: true },
   });
   if (bot === null) {

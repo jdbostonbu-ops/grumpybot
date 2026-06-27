@@ -18,8 +18,11 @@ const DashboardPage = async (): Promise<React.ReactElement> => {
     redirect('/login');
   }
 
-  const bot = await bots.getOrCreateBotForUser(userId);
-
+  const ownedBot = await bots.getOrCreateBotForUser(userId);
+  const bot = await prisma.bot.findUniqueOrThrow({
+    where: { id: ownedBot.id },
+    select: { id: true, name: true, slug: true },
+  });
   const documents = await prisma.document.findMany({
     where: { botId: bot.id },
     orderBy: { createdAt: 'asc' },
@@ -33,7 +36,8 @@ const DashboardPage = async (): Promise<React.ReactElement> => {
   const headerList = await headers();
   const host = headerList.get('host') ?? 'localhost:3000';
   const protocol = host.startsWith('localhost') ? 'http' : 'https';
-  const embedUrl = `${protocol}://${host}/embed/${bot.id}`;
+  const embedHandle = bot.slug ?? bot.id;
+  const embedUrl = `${protocol}://${host}/embed/${embedHandle}`;
 
   return (
     <div className="page">
@@ -41,6 +45,7 @@ const DashboardPage = async (): Promise<React.ReactElement> => {
       <DashboardClient
         botName={bot.name}
         botId={bot.id}
+        initialSlug={bot.slug ?? ''}
         embedUrl={embedUrl}
         initialDocs={documents}
         initialChunkCount={chunkCount}
