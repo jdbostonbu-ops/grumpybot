@@ -15,17 +15,17 @@ const HomePage = async (): Promise<React.ReactElement> => {
       <main>
         <section className="hero hero--pink">
           <div className="hero__inner">
-            <p className="hero__eyebrow">For any business · no code needed</p>
+            <p className="hero__eyebrow">For cohort students · no RAG required</p>
             <h1 className="hero__title">
-              Turn your handbook into a bot anyone can ask.
+              Add a working AI chatbot to your project — before you&apos;ve learned how to build one.
             </h1>
             <p className="hero__lead">
-              Upload your policies, menu, FAQs, or rules. We build you a chatbot
-              that answers customers — using only your documents.
+              Built for cohort students, Vibe Fridays, and portfolio projects.
+              Upload your project&apos;s docs, get an embeddable bot, paste it on your landing page.
             </p>
             <div className="hero__actions">
               <Link href="/dashboard" className="btn btn--dark">
-                Build my bot — free
+                Build my bot
               </Link>
               <Link href="/examples" className="btn btn--outline">
                 See an example
@@ -54,9 +54,9 @@ const HomePage = async (): Promise<React.ReactElement> => {
             </div>
           </div>
 
-          <h2 className="section-title">Businesses already using it</h2>
+          <h2 className="section-title">Built by cohort students like you</h2>
           <p className="section-sub">
-            every bot answers only from that business&apos;s own documents
+            every Vibe Friday project gets richer with a Q&amp;A bot grounded in its own content
           </p>
           <div className="biz-grid">
             <div className="biz-card biz-card--purple">
@@ -65,24 +65,24 @@ const HomePage = async (): Promise<React.ReactElement> => {
               <p className="biz-card__meta">coffee shop · 28 rules</p>
             </div>
             <div className="biz-card biz-card--pink">
-              <span className="biz-card__icon">🐾</span>
-              <h3 className="biz-card__name">Happy Tails Rescue</h3>
-              <p className="biz-card__meta">adoption policies · FAQ</p>
+              <span className="biz-card__icon">🎒</span>
+              <h3 className="biz-card__name">Survival Guide</h3>
+              <p className="biz-card__meta">freshman year · FAQ</p>
             </div>
             <div className="biz-card biz-card--green">
-              <span className="biz-card__icon">🔧</span>
-              <h3 className="biz-card__name">Riddle &amp; Wrench</h3>
-              <p className="biz-card__meta">auto repair · service guide</p>
+              <span className="biz-card__icon">📜</span>
+              <h3 className="biz-card__name">Fictional World Lore</h3>
+              <p className="biz-card__meta">main characters · old war</p>
             </div>
           </div>
         </div>
 
         <section className="band band--yellow">
           <div className="band__inner">
-            <h2>Ready to build yours?</h2>
-            <p>Free to start. No credit card. Your first bot in under 5 minutes.</p>
+            <h2>Ready to ship your next project?</h2>
+            <p>Your first bot in under 5 minutes. Built for portfolios, demos, and Vibe Fridays.</p>
             <Link href="/dashboard" className="btn btn--dark">
-              Build my bot — free
+              Build my bot
             </Link>
           </div>
         </section>
