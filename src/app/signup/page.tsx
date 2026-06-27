@@ -45,37 +45,43 @@ const SignupPage = (): React.ReactElement => {
   return (
     <div className="page">
       <NavBar />
-      <main className="narrow">
-        <h1>Create your account</h1>
-        <p>Sign up to build a bot from your own documents.</p>
-        <form className="card" onSubmit={handleSubmit} style={{ marginTop: '1rem' }}>
-          <div className="field">
-            <label htmlFor="signup-email">Email</label>
-            <input
-              id="signup-email"
-              name="email"
-              type="email"
-              autoComplete="email"
-              required
-            />
+      <main>
+        <section className="hero hero--yellow">
+          <div className="hero__inner">
+            <h1 className="hero__title">Create your account.</h1>
+            <p className="hero__lead">Sign up to build a bot from your own documents.</p>
           </div>
-          <PasswordField
-            id="signup-password"
-            name="password"
-            label="Password"
-            autoComplete="new-password"
-          />
-          {errorMessage ? <p className="error">{errorMessage}</p> : null}
-          <span style={{ display: 'inline-flex', alignItems: 'center', gap: '8px' }}>
-            <button type="submit" className="btn btn--primary" disabled={isSubmitting}>
-              {isSubmitting ? 'Creating…' : 'Create account'}
-            </button>
-            {isSubmitting ? <Spinner /> : null}
-          </span>
-        </form>
-        <p style={{ marginTop: '1rem' }}>
-          Already have an account? <Link href="/login">Log in</Link>
-        </p>
+        </section>
+        <div className="narrow">
+          <form className="card" onSubmit={handleSubmit} style={{ marginTop: '2rem' }}>
+            <div className="field">
+              <label htmlFor="signup-email">Email</label>
+              <input
+                id="signup-email"
+                name="email"
+                type="email"
+                autoComplete="email"
+                required
+              />
+            </div>
+            <PasswordField
+              id="signup-password"
+              name="password"
+              label="Password"
+              autoComplete="new-password"
+            />
+            {errorMessage ? <p className="error">{errorMessage}</p> : null}
+            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '8px' }}>
+              <button type="submit" className="btn btn--primary" disabled={isSubmitting}>
+                {isSubmitting ? 'Creating…' : 'Create account'}
+              </button>
+              {isSubmitting ? <Spinner /> : null}
+            </span>
+          </form>
+          <p style={{ marginTop: '1rem' }}>
+            Already have an account? <Link href="/login">Log in</Link>
+          </p>
+        </div>
       </main>
     </div>
   );

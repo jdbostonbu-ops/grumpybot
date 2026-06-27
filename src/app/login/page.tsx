@@ -53,40 +53,46 @@ const LoginPage = (): React.ReactElement => {
   return (
     <div className="page">
       <NavBar />
-      <main className="narrow">
-        <h1>Log in</h1>
-        <p>Welcome back. Log in to manage your bot.</p>
-        <form className="card" onSubmit={handleSubmit} style={{ marginTop: '1rem' }}>
-          <div className="field">
-            <label htmlFor="login-email">Email</label>
-            <input
-              id="login-email"
-              name="email"
-              type="email"
-              autoComplete="email"
-              required
-            />
+      <main>
+        <section className="hero hero--teal">
+          <div className="hero__inner">
+            <h1 className="hero__title">Log in.</h1>
+            <p className="hero__lead">Welcome back. Log in to manage your bot.</p>
           </div>
-          <PasswordField
-            id="login-password"
-            name="password"
-            label="Password"
-            autoComplete="current-password"
-          />
-          {errorMessage ? <p className="error">{errorMessage}</p> : null}
-          <span style={{ display: 'inline-flex', alignItems: 'center', gap: '8px' }}>
-            <button type="submit" className="btn btn--primary" disabled={isSubmitting}>
-              {isSubmitting ? 'Logging in…' : 'Log in'}
-            </button>
-            {isSubmitting ? <Spinner /> : null}
-          </span>
-        </form>
-        <p style={{ marginTop: '1rem' }}>
-          Don&apos;t have an account? <Link href="/signup">Sign up</Link>
-        </p>
-        <p>
-          <Link href="/reset-request">Forgot password?</Link>
-        </p>
+        </section>
+        <div className="narrow">
+          <form className="card" onSubmit={handleSubmit} style={{ marginTop: '2rem' }}>
+            <div className="field">
+              <label htmlFor="login-email">Email</label>
+              <input
+                id="login-email"
+                name="email"
+                type="email"
+                autoComplete="email"
+                required
+              />
+            </div>
+            <PasswordField
+              id="login-password"
+              name="password"
+              label="Password"
+              autoComplete="current-password"
+            />
+            {errorMessage ? <p className="error">{errorMessage}</p> : null}
+            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '8px' }}>
+              <button type="submit" className="btn btn--primary" disabled={isSubmitting}>
+                {isSubmitting ? 'Logging in…' : 'Log in'}
+              </button>
+              {isSubmitting ? <Spinner /> : null}
+            </span>
+          </form>
+          <p style={{ marginTop: '1rem' }}>
+            Don&apos;t have an account? <Link href="/signup">Sign up</Link>
+          </p>
+          <p>
+            <Link href="/reset-request">Forgot password?</Link>
+          </p>
+        </div>
       </main>
     </div>
   );

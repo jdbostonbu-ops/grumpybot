@@ -1496,3 +1496,8 @@ a {
   font-size: 0.95rem;
   border: 2px solid #2b2150;
 }
+
+/* Teal hero variant — used on /login */
+.hero--teal {
+  background: #4ec3e0;
+}
