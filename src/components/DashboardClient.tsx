@@ -156,13 +156,18 @@ export const DashboardClient = (props: DashboardClientProps): React.ReactElement
   return (
     <div className="dash">
 
+      <section className="dash-header-band">
+        <div className="dash-header-band__inner">
+          <p className="dash-eyebrow">Dashboard</p>
+          <h1 className="dash-h1">Your bot is live 🎉</h1>
+          <p className="dash-meta">
+            Answering from {docs.length} document{docs.length === 1 ? '' : 's'} ·{' '}
+            {chunkCount} chunk{chunkCount === 1 ? '' : 's'} indexed
+          </p>
+        </div>
+      </section>
+
       <div className="dash-body">
-        <p className="dash-eyebrow">Dashboard</p>
-        <h1 className="dash-h1">Your bot is live 🎉</h1>
-        <p className="dash-meta">
-          Answering from {docs.length} document{docs.length === 1 ? '' : 's'} ·{' '}
-          {chunkCount} chunk{chunkCount === 1 ? '' : 's'} indexed
-        </p>
 
         <div className="stat-grid">
           <div className="stat stat--purple">
@@ -255,6 +260,18 @@ export const DashboardClient = (props: DashboardClientProps): React.ReactElement
           )}
         </div>
 
+      </div>
+
+      <section className="dash-quote-band">
+        <p className="dash-quote">
+          <span className="dash-quote__mark">&ldquo;</span>
+          Upload markdown files. Talk to the chatbot. <br />Copy the embed.{' '}
+          <span className="dash-quote__pop">Add it to your code.</span>
+          <span className="dash-quote__mark">&rdquo;</span>
+        </p>
+      </section>
+
+      <div className="dash-body">
         <div className="dash-split">
           <div className="dash-panel dash-panel--teal">
             <h3 className="dash-panel__title">👁 Preview your bot</h3>
