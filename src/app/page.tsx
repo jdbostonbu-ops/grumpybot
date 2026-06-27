@@ -59,6 +59,21 @@ const HomePage = async (): Promise<React.ReactElement> => {
             every Vibe Friday project gets richer with a Q&amp;A bot grounded in its own content
           </p>
           <div className="biz-grid">
+            <div className="biz-card biz-card--teal">
+              <span className="biz-card__icon">📚</span>
+              <h3 className="biz-card__name">Study Buddy</h3>
+              <p className="biz-card__meta">class notes · syllabus</p>
+            </div>
+            <div className="biz-card biz-card--red">
+              <span className="biz-card__icon">🍳</span>
+              <h3 className="biz-card__name">Recipe Box</h3>
+              <p className="biz-card__meta">cookbook · weeknight ideas</p>
+            </div>
+            <div className="biz-card biz-card--navy">
+              <span className="biz-card__icon">🌀</span>
+              <h3 className="biz-card__name">Weird Stuff</h3>
+              <p className="biz-card__meta">curated oddities · portfolio party trick</p>
+            </div>
             <div className="biz-card biz-card--purple">
               <span className="biz-card__icon">☕</span>
               <h3 className="biz-card__name">The Grumpy Bean</h3>

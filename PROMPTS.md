@@ -292,6 +292,44 @@ A line of code that puts your bot inside any website that lets you paste HTML.
 Share the link anywhere, or paste the embed into your site code.
 ```
 
+Custom inquiry band:
+
+```text
+Need a bot that isn't here?
+GrumpyBot handles Q&A on your documents. For more advanced setups — Multimodal RAG (bots that read images), Agentic RAG (bots that reason in multiple steps), or Voice RAG (talk-to-your-bot) — we'll build it custom.
+Tell us about your project. We'll send you ready-to-paste code for your site.
+Start project inquiry →
+Hide form ↑
+```
+
+Custom inquiry form:
+
+```text
+Thank you!
+Your submission has been received. We're getting Grumpy for you!
+GrumpyBot
+we'll get back to you
+Tell us about your project
+Name
+Email
+Phone
+Deadline
+e.g. end of August
+RAG type
+Pick one…
+Multimodal RAG (reads images)
+Agentic RAG (multi-step reasoning)
+Voice RAG (talk to your bot)
+Other / not sure
+Audience
+Who will use this bot?
+Tell us about your project
+What you want it to do
+Sending…
+Send inquiry
+Could not send. Try again.
+```
+
 Share and copy controls:
 
 ```text
@@ -442,9 +480,35 @@ Your code is: {code}
 If you did not request this, you can ignore this email.
 ```
 
+Inquiry email template:
+
+Source: `src/lib/email.ts`
+
+```text
+New project inquiry from {name}
+New project inquiry
+
+Name: {name}
+Email: {email}
+Phone: {phoneOrNotProvided}
+RAG type: {ragType}
+Deadline: {deadlineOrNotProvided}
+
+Audience:
+{audience}
+
+Project description:
+{project}
+
+What they want it to do:
+{goals}
+
+(not provided)
+```
+
 ## API Validation And Error Messages
 
-Sources: `src/app/api/bot/route.ts`, `src/app/api/bot/upload/route.ts`, `src/app/api/bot/ask/route.ts`, `src/app/api/embed/ask/route.ts`, `src/app/api/example/ask/route.ts`, `src/app/api/bot/document/[id]/route.ts`, `src/app/api/bot/slug/route.ts`, `src/app/api/bot/theme/route.ts`
+Sources: `src/app/api/bot/route.ts`, `src/app/api/bot/upload/route.ts`, `src/app/api/bot/ask/route.ts`, `src/app/api/embed/ask/route.ts`, `src/app/api/example/ask/route.ts`, `src/app/api/bot/document/[id]/route.ts`, `src/app/api/bot/slug/route.ts`, `src/app/api/bot/theme/route.ts`, `src/app/api/inquiry/route.ts`
 
 ```text
 Not signed in.
@@ -463,6 +527,9 @@ Use lowercase letters, numbers, and hyphens only (2-40 characters).
 That slug is already taken.
 Invalid request body.
 Each color must be a 6-digit hex value like #1a2b3c.
+Please fill in all required fields.
+Enter a valid email.
+Could not send right now. Try again.
 ```
 
 ## Site And Example Page Copy
@@ -508,6 +575,12 @@ Your bot learns your docs in seconds.
 Add it to your site or share a link.
 Built by cohort students like you
 every Vibe Friday project gets richer with a Q&A bot grounded in its own content
+Study Buddy
+class notes · syllabus
+Recipe Box
+cookbook · weeknight ideas
+Weird Stuff
+curated oddities · portfolio party trick
 The Grumpy Bean
 coffee shop · 28 rules
 Survival Guide
@@ -739,6 +812,7 @@ src/app/api/example/ask/route.ts
 src/app/api/bot/document/[id]/route.ts
 src/app/api/bot/theme/route.ts
 src/app/api/bot/slug/route.ts
+src/app/api/inquiry/route.ts
 src/app/api/auth/login/route.ts
 src/app/api/auth/signup/route.ts
 src/app/api/auth/verify/route.ts
