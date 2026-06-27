@@ -40,7 +40,7 @@ const HomePage = async (): Promise<React.ReactElement> => {
             <div className="card feature feature--center">
               <span className="icon-circle icon-circle--yellow">⬆</span>
               <h3>1. Upload</h3>
-              <p>Drop in your handbook, menu, or FAQ files.</p>
+              <p>Drop in your mark down file, menu, handbook or FAQ md files.</p>
             </div>
             <div className="card feature feature--center">
               <span className="icon-circle icon-circle--teal">✦</span>
@@ -95,7 +95,7 @@ const HomePage = async (): Promise<React.ReactElement> => {
         <section className="band band--yellow">
           <div className="band__inner">
             <h2>Ready to ship your next project?</h2>
-            <p>Your first bot in under 5 minutes. Built for portfolios, demos, and Vibe Fridays.</p>
+            <p>Your first bot in under 5 minutes. Built for portfolios, demos, real clients and Vibe Fridays.</p>
             <Link href="/dashboard" className="btn btn--dark">
               Build my bot
             </Link>

@@ -408,6 +408,14 @@ export const DashboardClient = (props: DashboardClientProps): React.ReactElement
               <span className="confetti-piece" aria-hidden="true"></span>
               <span className="confetti-piece" aria-hidden="true"></span>
               <span className="confetti-piece" aria-hidden="true"></span>
+              <span className="confetti-piece" aria-hidden="true"></span>
+              <span className="confetti-piece" aria-hidden="true"></span>
+              <span className="confetti-piece" aria-hidden="true"></span>
+              <span className="confetti-piece" aria-hidden="true"></span>
+              <span className="confetti-piece" aria-hidden="true"></span>
+              <span className="confetti-piece" aria-hidden="true"></span>
+              <span className="confetti-piece" aria-hidden="true"></span>
+              <span className="confetti-piece" aria-hidden="true"></span>
             </span>
           </h1>
           <p className="dash-meta">

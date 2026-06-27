@@ -180,6 +180,15 @@ Slug saved message:
 Saved.
 ```
 
+Streaming response toggle:
+
+```text
+Streaming responses
+Make answers type out word-by-word, like ChatGPT. Try it in the preview chat above.
+On
+Off
+```
+
 ### Embed Page
 
 Source: `src/app/embed/[botId]/page.tsx`
@@ -202,6 +211,8 @@ Could not save colors. Please try again.
 Enter a slug.
 Could not save slug.
 Could not save slug. Please try again.
+streamingEnabled must be true or false.
+No fields to update.
 ```
 
 ### Grumpy Bean Example Chat
@@ -527,6 +538,9 @@ Use lowercase letters, numbers, and hyphens only (2-40 characters).
 That slug is already taken.
 Invalid request body.
 Each color must be a 6-digit hex value like #1a2b3c.
+streamingEnabled must be true or false.
+No fields to update.
+Stream failed.
 Please fill in all required fields.
 Enter a valid email.
 Could not send right now. Try again.
