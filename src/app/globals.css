@@ -1879,6 +1879,38 @@ a {
   background: #4ec3e0;
   animation-name: confetti-fly-8;
 }
+.confetti-trigger:hover .confetti-piece:nth-child(10) {
+  background: #18b87b;
+  animation-name: confetti-fly-9;
+}
+.confetti-trigger:hover .confetti-piece:nth-child(11) {
+  background: #6c4ad6;
+  animation-name: confetti-fly-10;
+}
+.confetti-trigger:hover .confetti-piece:nth-child(12) {
+  background: #ff5fa2;
+  animation-name: confetti-fly-11;
+}
+.confetti-trigger:hover .confetti-piece:nth-child(13) {
+  background: #ffd84d;
+  animation-name: confetti-fly-12;
+}
+.confetti-trigger:hover .confetti-piece:nth-child(14) {
+  background: #4ec3e0;
+  animation-name: confetti-fly-13;
+}
+.confetti-trigger:hover .confetti-piece:nth-child(15) {
+  background: #18b87b;
+  animation-name: confetti-fly-14;
+}
+.confetti-trigger:hover .confetti-piece:nth-child(16) {
+  background: #6c4ad6;
+  animation-name: confetti-fly-15;
+}
+.confetti-trigger:hover .confetti-piece:nth-child(17) {
+  background: #ff5fa2;
+  animation-name: confetti-fly-16;
+}
 @keyframes confetti-fly-1 {
   0% { opacity: 1; transform: translate(-50%, -50%) rotate(0deg); }
   100% { opacity: 0; transform: translate(calc(-50% - 60px), calc(-50% - 50px)) rotate(360deg); }
@@ -1910,6 +1942,38 @@ a {
 @keyframes confetti-fly-8 {
   0% { opacity: 1; transform: translate(-50%, -50%) rotate(0deg); }
   100% { opacity: 0; transform: translate(calc(-50% + 20px), calc(-50% - 80px)) rotate(-540deg); }
+}
+@keyframes confetti-fly-9 {
+  0% { opacity: 1; transform: translate(-50%, -50%) rotate(0deg); }
+  100% { opacity: 0; transform: translate(calc(-50% - 100px), calc(-50% - 10px)) rotate(420deg); }
+}
+@keyframes confetti-fly-10 {
+  0% { opacity: 1; transform: translate(-50%, -50%) rotate(0deg); }
+  100% { opacity: 0; transform: translate(calc(-50% + 100px), calc(-50% - 10px)) rotate(-420deg); }
+}
+@keyframes confetti-fly-11 {
+  0% { opacity: 1; transform: translate(-50%, -50%) rotate(0deg); }
+  100% { opacity: 0; transform: translate(calc(-50% - 70px), calc(-50% - 90px)) rotate(660deg); }
+}
+@keyframes confetti-fly-12 {
+  0% { opacity: 1; transform: translate(-50%, -50%) rotate(0deg); }
+  100% { opacity: 0; transform: translate(calc(-50% + 70px), calc(-50% - 90px)) rotate(-660deg); }
+}
+@keyframes confetti-fly-13 {
+  0% { opacity: 1; transform: translate(-50%, -50%) rotate(0deg); }
+  100% { opacity: 0; transform: translate(calc(-50% - 70px), calc(-50% + 80px)) rotate(480deg); }
+}
+@keyframes confetti-fly-14 {
+  0% { opacity: 1; transform: translate(-50%, -50%) rotate(0deg); }
+  100% { opacity: 0; transform: translate(calc(-50% + 70px), calc(-50% + 80px)) rotate(-480deg); }
+}
+@keyframes confetti-fly-15 {
+  0% { opacity: 1; transform: translate(-50%, -50%) rotate(0deg); }
+  100% { opacity: 0; transform: translate(calc(-50% - 10px), calc(-50% + 100px)) rotate(600deg); }
+}
+@keyframes confetti-fly-16 {
+  0% { opacity: 1; transform: translate(-50%, -50%) rotate(0deg); }
+  100% { opacity: 0; transform: translate(calc(-50% + 10px), calc(-50% + 100px)) rotate(-600deg); }
 }
 
 /* Streaming responses toggle (green Share panel) */
@@ -1951,4 +2015,43 @@ a {
 .streaming-switch.is-on {
   background: #fff4fa;
   color: #18b87b;
+}
+
+/* Landing biz-card — hover lift with colored glow per variant */
+.biz-card {
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+.biz-card:hover {
+  transform: translateY(-6px);
+}
+.biz-card--purple:hover {
+  box-shadow: 0 12px 32px rgba(108, 74, 214, 0.45);
+}
+.biz-card--pink:hover {
+  box-shadow: 0 12px 32px rgba(255, 95, 162, 0.45);
+}
+.biz-card--green:hover {
+  box-shadow: 0 12px 32px rgba(24, 184, 123, 0.45);
+}
+.biz-card--teal:hover {
+  box-shadow: 0 12px 32px rgba(78, 195, 224, 0.5);
+}
+.biz-card--red:hover {
+  box-shadow: 0 12px 32px rgba(233, 69, 96, 0.45);
+}
+.biz-card--navy:hover {
+  box-shadow: 0 12px 32px rgba(43, 33, 80, 0.5);
+}
+
+/* Pill button hover — expand + colored glow */
+.btn {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.btn--dark:hover {
+  transform: translateY(-2px) scale(1.04);
+  box-shadow: 0 16px 32px rgba(108, 74, 214, 0.45);
+}
+.btn--outline:hover {
+  transform: translateY(-2px) scale(1.04);
+  box-shadow: 0 12px 24px rgba(43, 33, 80, 0.18);
 }
