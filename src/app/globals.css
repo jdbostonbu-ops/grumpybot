@@ -1544,7 +1544,7 @@ a {
   padding: 14px 16px;
   border: 1px solid var(--embed-text, #2b2150);
   border-radius: 8px;
-  background: transparent;
+  background: var(--embed-bot-bubble, #f3f1f9);
   color: var(--embed-text, #2b2150);
   font-size: 1.05rem;
   font-family: inherit;
@@ -1664,7 +1664,7 @@ a {
   color: var(--preview-text);
 }
 .preview-mode .chat-form input {
-  background: transparent;
+  background: var(--preview-bot-bubble);
   border: 1px solid var(--preview-text);
   color: var(--preview-text);
 }
@@ -1675,4 +1675,53 @@ a {
 .preview-mode .chat-form .btn--dark {
   background: var(--preview-accent);
   border-color: var(--preview-accent);
+}
+
+/* Landing — new biz-card color variants for row 1 (Study Buddy, Recipe Box, Weird Stuff) */
+.biz-card--teal {
+  background: #4ec3e0;
+  color: #2b2150;
+}
+.biz-card--red {
+  background: #e94560;
+  color: #ffffff;
+}
+.biz-card--navy {
+  background: #2b2150;
+  color: #ffffff;
+}
+
+/* Dashboard — Hot pink band: "Need a bot that isn't here?" */
+.band--hotpink {
+  background: #ff5fa2;
+  padding: 64px 32px;
+  margin: 48px 0 0 0;
+  width: 100vw;
+  position: relative;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
+}
+.band--hotpink .band__inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  text-align: center;
+}
+.band--hotpink .band__title {
+  font-size: 3rem;
+  font-weight: 700;
+  color: #2b2150;
+  margin: 0 0 24px 0;
+  line-height: 1.1;
+}
+.band--hotpink .band__body {
+  font-size: 1.1rem;
+  line-height: 1.6;
+  color: #2b2150;
+  max-width: 720px;
+  margin: 0 auto 16px auto;
+}
+.band--hotpink .band__cta {
+  margin-top: 24px;
 }

@@ -667,6 +667,23 @@ export const DashboardClient = (props: DashboardClientProps): React.ReactElement
             </div>
           </div>
         </div>
+        <section className="band band--hotpink">
+          <div className="band__inner">
+            <h2 className="band__title">Need a bot that isn't here?</h2>
+            <p className="band__body">
+              GrumpyBot handles Q&amp;A on your documents. For more advanced
+              setups — Multimodal RAG (bots that read images), Agentic RAG
+              (bots that reason in multiple steps), or Voice RAG (talk-to-your-bot)
+              — we&apos;ll build it custom.
+            </p>
+            <p className="band__body">
+              Tell us about your project. We&apos;ll send you ready-to-paste code for your site.
+            </p>
+            <button type="button" className="btn btn--dark band__cta">
+              Start project inquiry →
+            </button>
+          </div>
+        </section>
       </div>
     </div>
   );
