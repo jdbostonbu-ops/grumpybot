@@ -15,6 +15,7 @@ export const NavBar = (): React.ReactElement => (
       GrumpyBot
     </Link>
     <div className="nav__links">
+      <Link href="/">Home</Link>
       <Link href="/how-it-works">How it works</Link>
       <Link href="/examples">Examples</Link>
       <Link href="/pricing">Pricing</Link>

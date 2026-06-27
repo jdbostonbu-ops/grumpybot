@@ -1,13 +1,14 @@
-import { Resend } from 'resend';
+import sgMail from '@sendgrid/mail';
 import { env } from '@/lib/env';
 
-let resend: Resend | undefined;
+let configured = false;
 
-const getResend = (): Resend => {
-  if (resend === undefined) {
-    resend = new Resend(env.resendApiKey);
+const getClient = (): typeof sgMail => {
+  if (!configured) {
+    sgMail.setApiKey(env.sendgridApiKey);
+    configured = true;
   }
-  return resend;
+  return sgMail;
 };
 
 const sendCodeEmail = async (
@@ -16,7 +17,7 @@ const sendCodeEmail = async (
   heading: string,
   code: string,
 ): Promise<void> => {
-  await getResend().emails.send({
+  await getClient().send({
     from: env.emailFrom,
     to,
     subject,
@@ -28,15 +29,15 @@ export const email = {
   sendVerificationCode: async (to: string, code: string): Promise<void> => {
     await sendCodeEmail(
       to,
-      'Verify your HandbookBot account',
-      'Welcome to HandbookBot! Use the code below to verify your email.',
+      'Verify your GrumpyBot account',
+      'Welcome to GrumpyBot! Use the code below to verify your email.',
       code,
     );
   },
   sendResetCode: async (to: string, code: string): Promise<void> => {
     await sendCodeEmail(
       to,
-      'Reset your HandbookBot password',
+      'Reset your GrumpyBot password',
       'Use the code below to reset your password.',
       code,
     );

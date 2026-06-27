@@ -17,8 +17,8 @@ export const env = {
   get openaiApiKey(): string {
     return required('OPENAI_API_KEY');
   },
-  get resendApiKey(): string {
-    return required('RESEND_API_KEY');
+  get sendgridApiKey(): string {
+    return required('SENDGRID_API_KEY');
   },
   get emailFrom(): string {
     return required('EMAIL_FROM');
