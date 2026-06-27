@@ -9,6 +9,7 @@ export type EmbedTheme = {
   readonly background: string;
   readonly text: string;
   readonly accent: string;
+  readonly botBubble: string;
 };
 
 export const EMBED_THEMES: readonly EmbedTheme[] = [
@@ -18,6 +19,7 @@ export const EMBED_THEMES: readonly EmbedTheme[] = [
     background: '#ffffff',
     text: '#2b2150',
     accent: '#6c4ad6',
+    botBubble: '#f3f1f9',
   },
   {
     key: 'dark-code',
@@ -25,6 +27,7 @@ export const EMBED_THEMES: readonly EmbedTheme[] = [
     background: '#131826',
     text: '#e2e8f0',
     accent: '#06b6d4',
+    botBubble: '#1e2438',
   },
   {
     key: 'playful',
@@ -32,6 +35,7 @@ export const EMBED_THEMES: readonly EmbedTheme[] = [
     background: '#fffbeb',
     text: '#2b2150',
     accent: '#ff5fa2',
+    botBubble: '#ffffff',
   },
   {
     key: 'forest',
@@ -39,6 +43,7 @@ export const EMBED_THEMES: readonly EmbedTheme[] = [
     background: '#f0f4ea',
     text: '#1a3d2e',
     accent: '#18b87b',
+    botBubble: '#ffffff',
   },
   {
     key: 'ocean',
@@ -46,13 +51,15 @@ export const EMBED_THEMES: readonly EmbedTheme[] = [
     background: '#e1f0f5',
     text: '#0f3a52',
     accent: '#0891b2',
+    botBubble: '#ffffff',
   },
   {
     key: 'teal',
     label: 'Teal',
     background: '#4ec3e0',
-    text: '#fff4fa',
+    text: '#2b2150',
     accent: '#2b2150',
+    botBubble: '#fff4fa',
   },
 ];
 

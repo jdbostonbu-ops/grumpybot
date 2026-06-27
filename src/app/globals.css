@@ -1531,9 +1531,8 @@ a {
   color: #ffffff;
 }
 .embed-chat .bubble--bot {
-  background: transparent;
+  background: var(--embed-bot-bubble, #f3f1f9);
   color: var(--embed-text, #2b2150);
-  border: 1px solid var(--embed-text, #2b2150);
 }
 .embed-chat__form {
   display: flex;
@@ -1641,4 +1640,39 @@ a {
 }
 .theme-save {
   margin-bottom: 16px;
+}
+
+/* Preview mode — Dashboard Preview panel adopts the user's picked theme */
+.preview-mode .dash-panel--teal {
+  background: var(--preview-bg);
+}
+.preview-mode .dash-panel__title,
+.preview-mode .dash-panel__sub,
+.preview-mode .dash-chat__hint {
+  color: var(--preview-text);
+}
+.preview-mode .dash-chat {
+  background: transparent;
+  border: 1px solid var(--preview-text);
+}
+.preview-mode .bubble--user {
+  background: var(--preview-accent);
+  color: #ffffff;
+}
+.preview-mode .bubble--bot {
+  background: var(--preview-bot-bubble);
+  color: var(--preview-text);
+}
+.preview-mode .chat-form input {
+  background: transparent;
+  border: 1px solid var(--preview-text);
+  color: var(--preview-text);
+}
+.preview-mode .chat-form input::placeholder {
+  color: var(--preview-text);
+  opacity: 0.5;
+}
+.preview-mode .chat-form .btn--dark {
+  background: var(--preview-accent);
+  border-color: var(--preview-accent);
 }

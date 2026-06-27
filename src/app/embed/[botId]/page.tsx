@@ -1,6 +1,6 @@
 import { prisma } from '@/lib/prisma';
 import { EmbedChat } from '@/components/EmbedChat';
-import { DEFAULT_THEME } from '@/lib/embed-themes';
+import { DEFAULT_THEME, EMBED_THEMES } from '@/lib/embed-themes';
 
 type EmbedPageProps = {
   params: Promise<{ botId: string }>;
@@ -28,10 +28,22 @@ const EmbedPage = async (props: EmbedPageProps): Promise<React.ReactElement> => 
     );
   }
 
+  const background = bot.themeBackground ?? DEFAULT_THEME.background;
+  const text = bot.themeText ?? DEFAULT_THEME.text;
+  const accent = bot.themeAccent ?? DEFAULT_THEME.accent;
+  const matchingPreset = EMBED_THEMES.find(
+    (preset) =>
+      preset.background === background &&
+      preset.text === text &&
+      preset.accent === accent,
+  );
+  const botBubble = matchingPreset?.botBubble ?? DEFAULT_THEME.botBubble;
+
   const themeStyle = {
-    '--embed-bg': bot.themeBackground ?? DEFAULT_THEME.background,
-    '--embed-text': bot.themeText ?? DEFAULT_THEME.text,
-    '--embed-accent': bot.themeAccent ?? DEFAULT_THEME.accent,
+    '--embed-bg': background,
+    '--embed-text': text,
+    '--embed-accent': accent,
+    '--embed-bot-bubble': botBubble,
   } as React.CSSProperties;
 
   return (

@@ -399,6 +399,21 @@ export const DashboardClient = (props: DashboardClientProps): React.ReactElement
 
       <div className="dash-body">
         <div className="dash-split">
+          <div
+            className="preview-mode"
+            style={{
+              '--preview-bg': themeBackground,
+              '--preview-text': themeText,
+              '--preview-accent': themeAccent,
+              '--preview-bot-bubble':
+                EMBED_THEMES.find(
+                  (preset) =>
+                    preset.background === themeBackground &&
+                    preset.text === themeText &&
+                    preset.accent === themeAccent,
+                )?.botBubble ?? DEFAULT_THEME.botBubble,
+            } as React.CSSProperties}
+          >
           <div className="dash-panel dash-panel--teal">
             <h3 className="dash-panel__title">👁 Preview your bot</h3>
             <p className="dash-panel__sub">Test questions before customers do</p>
@@ -444,6 +459,7 @@ export const DashboardClient = (props: DashboardClientProps): React.ReactElement
                 Ask
               </button>
             </form>
+          </div>
           </div>
 
           <div className="dash-panel dash-panel--green">
