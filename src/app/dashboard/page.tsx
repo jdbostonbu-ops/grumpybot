@@ -41,7 +41,7 @@ const DashboardPage = async (): Promise<React.ReactElement> => {
 
   return (
     <div className="page">
-      <NavBar />
+      <NavBar userId={userId} />
       <DashboardClient
         botName={bot.name}
         botId={bot.id}

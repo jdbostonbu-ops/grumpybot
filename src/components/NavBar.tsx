@@ -1,8 +1,13 @@
 import Link from 'next/link';
 import Image from 'next/image';
+import { LogoutButton } from '@/components/LogoutButton';
 
 // The GrumpyBot top nav. Appears on every page for consistency.
-export const NavBar = (): React.ReactElement => (
+type NavBarProps = {
+  userId?: string | null;
+};
+
+export const NavBar = ({ userId = null }: NavBarProps = {}): React.ReactElement => (
   <nav className="nav">
     <Link href="/" className="nav__brand">
       <Image
@@ -22,6 +27,7 @@ export const NavBar = (): React.ReactElement => (
       <Link href="/dashboard" className="btn btn--primary">
         Get started
       </Link>
+      {userId !== null ? <LogoutButton /> : null}
     </div>
   </nav>
 );

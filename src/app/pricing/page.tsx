@@ -11,7 +11,7 @@ const PricingPage = async (): Promise<React.ReactElement> => {
 
   return (
     <div className="page">
-      <NavBar />
+      <NavBar userId={userId} />
       <main>
         <section className="hero hero--yellow">
           <div className="hero__inner">

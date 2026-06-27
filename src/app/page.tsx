@@ -11,7 +11,7 @@ const HomePage = async (): Promise<React.ReactElement> => {
 
   return (
     <div className="page">
-      <NavBar />
+      <NavBar userId={userId} />
       <main>
         <section className="hero hero--pink">
           <div className="hero__inner">

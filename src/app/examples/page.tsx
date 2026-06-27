@@ -12,7 +12,7 @@ const ExamplesPage = async (): Promise<React.ReactElement> => {
 
   return (
      <>
-      <NavBar />
+      <NavBar userId={userId} />
     <div className="bean">
       <nav className="bean-nav">
         <span className="bean-nav__brand">☕ The Grumpy Bean</span>
