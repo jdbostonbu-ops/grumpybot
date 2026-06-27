@@ -926,6 +926,12 @@ a {
   border: 3px solid var(--navy);
   border-radius: var(--radius-lg);
   padding: 1.5rem;
+  transition: transform 0.22s ease, box-shadow 0.22s ease;
+}
+
+.bean-menu-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 28px rgba(43, 33, 80, 0.16);
 }
 
 .bean-menu-card h3 {
@@ -961,6 +967,11 @@ a {
   padding: 16px 26px;
   color: #fff;
   font-size: 1.2rem;
+  transition: transform 0.22s ease, box-shadow 0.22s ease;
+}
+
+.bean-rule:hover {
+  transform: translateY(-4px);
 }
 
 .bean-rule strong {
@@ -971,12 +982,24 @@ a {
   background: var(--purple);
 }
 
+.bean-rule--purple:hover {
+  box-shadow: 0 10px 24px rgba(108, 74, 214, 0.35);
+}
+
 .bean-rule--green {
   background: var(--mint);
 }
 
+.bean-rule--green:hover {
+  box-shadow: 0 10px 24px rgba(24, 184, 123, 0.35);
+}
+
 .bean-rule--pink {
   background: var(--hot-pink);
+}
+
+.bean-rule--pink:hover {
+  box-shadow: 0 10px 24px rgba(255, 95, 162, 0.35);
 }
 
 .bean-ask {

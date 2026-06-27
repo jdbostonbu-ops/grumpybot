@@ -6,7 +6,7 @@
 
 <p align="center">
   <b>For students, new coders, and new entrepreneurs.</b><br/>
-  Your first bot in under 5 minutes. Built for portfolios, demos, real clients, and Vibe Fridays. Upload your project's docs, get an embeddable bot, paste it on your landing page.
+  Your first bot in under 5 minutes. Built for portfolios, demos, real clients, and Vibe Fridays.
 </p>
 
 <p align="center">
@@ -18,6 +18,7 @@
   <img src="https://img.shields.io/badge/pgvector-0.5-336791?logo=postgresql&logoColor=white" alt="pgvector" />
   <img src="https://img.shields.io/badge/OpenAI-GPT--4o--mini-412991?logo=openai&logoColor=white" alt="OpenAI" />
   <img src="https://img.shields.io/badge/SendGrid-Email-1A82E2?logo=minutemailer&logoColor=white" alt="SendGrid" />
+  <img src="https://img.shields.io/badge/Cloudflare-DNS%20%2B%20Routing-F38020?logo=cloudflare&logoColor=white" alt="Cloudflare" />
   <img src="https://img.shields.io/badge/Deploy-Vercel-000000?logo=vercel&logoColor=white" alt="Vercel" />
 </p>
 
@@ -41,14 +42,18 @@
 
 ## ✨ Features
 
-- 📚 **RAG-powered handbook bots** — upload `.md`, `.txt`, or `.json` files and the bot answers only from your documents (no hallucinations)
-- 🔌 **One-line embed** — paste an iframe on any site with a custom slug like `grumpybot.fyi/embed/your-bot`
-- 🎨 **6 color themes + custom hex** — match your bot's look to your brand, with live preview in the dashboard
+- 📚 **Build a bot from your content** — drop in `.md`, `.txt`, or `.json` files (handbooks, cookbooks, study notes, FAQs, fictional worlds — anything). Your bot answers only from those documents, no hallucinations, no outside knowledge
+- 🔌 **No-code iframe embed** — your bot ships with a one-line `<iframe>` snippet and a custom slug (`grumpybot.fyi/embed/your-slug`). Paste it on any site — Webflow, Squarespace, your portfolio, a Notion page that allows HTML — no coding required
+- 🎨 **6 color themes + custom hex** — match your bot's look to your brand with a live preview in the dashboard
 - ⚡ **Streaming responses** — toggle word-by-word streaming on or off per bot (like ChatGPT, in your bot)
-- 💌 **Project inquiry form** — animated flip-card form on the dashboard with email delivery via SendGrid + Cloudflare routing
-- 🔐 **Email-verified authentication** — signup with verification code, login, password reset, all via SendGrid
-- 🧑‍🏫 **Grumpy Bean example bot** — pre-seeded showcase bot demonstrating the full RAG pipeline
-- 🎉 **Confetti, hover glows, card flips** — small touches throughout (hover the dashboard 🎉 emoji, watch the cards lift on the landing page)
+- 🚀 **Request advanced bots** — built-in flip-card inquiry form lets visitors commission custom builds:
+  - **Multimodal RAG** — reads images, not just text
+  - **Agentic RAG** — multi-step reasoning across documents
+  - **Voice RAG** — spoken conversations with your bot
+  - Inquiries are emailed to `inquiry@grumpybot.fyi` via verified SendGrid + Cloudflare Email Routing — real delivery, not a fake form
+- 🔐 **Real email-verified authentication** — signup with verification code, password reset, all delivered via SendGrid from the verified `grumpybot.fyi` domain (no dev sandbox, no "noreply@gmail")
+- 🧑‍🏫 **Grumpy Bean example bot** — pre-seeded showcase bot demonstrating the full RAG pipeline you can try without signing up
+- 🎉 **Confetti, hover glows, card flips** — small touches throughout (hover the dashboard 🎉, watch the landing-page cards lift, see the inquiry card spin and flip on submit)
 
 ---
 
