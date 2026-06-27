@@ -1,5 +1,6 @@
 import { prisma } from '@/lib/prisma';
 import { EmbedChat } from '@/components/EmbedChat';
+import { DEFAULT_THEME } from '@/lib/embed-themes';
 
 type EmbedPageProps = {
   params: Promise<{ botId: string }>;
@@ -10,7 +11,13 @@ const EmbedPage = async (props: EmbedPageProps): Promise<React.ReactElement> => 
 
   const bot = await prisma.bot.findFirst({
     where: { OR: [{ slug: botId }, { id: botId }] },
-    select: { id: true, name: true },
+    select: {
+      id: true,
+      name: true,
+      themeBackground: true,
+      themeText: true,
+      themeAccent: true,
+    },
   });
 
   if (bot === null) {
@@ -21,8 +28,14 @@ const EmbedPage = async (props: EmbedPageProps): Promise<React.ReactElement> => 
     );
   }
 
+  const themeStyle = {
+    '--embed-bg': bot.themeBackground ?? DEFAULT_THEME.background,
+    '--embed-text': bot.themeText ?? DEFAULT_THEME.text,
+    '--embed-accent': bot.themeAccent ?? DEFAULT_THEME.accent,
+  } as React.CSSProperties;
+
   return (
-    <div className="embed-page">
+    <div className="embed-page" style={themeStyle}>
       <EmbedChat botId={bot.id} />
     </div>
   );

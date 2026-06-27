@@ -1,5 +1,6 @@
 'use client';
 
+import { EMBED_THEMES, DEFAULT_THEME, type EmbedTheme } from '@/lib/embed-themes';
 import { useState, useRef, type FormEvent, type ChangeEvent } from 'react';
 
 type DocItem = {
@@ -13,6 +14,12 @@ type ChatMessage = {
   sources?: string[];
 };
 
+type InitialTheme = {
+  background: string | null;
+  text: string | null;
+  accent: string | null;
+};
+
 type DashboardClientProps = {
   botName: string;
   botId: string;
@@ -20,6 +27,7 @@ type DashboardClientProps = {
   embedUrl: string;
   initialDocs: DocItem[];
   initialChunkCount: number;
+  initialTheme: InitialTheme;
 };
 
 export const DashboardClient = (props: DashboardClientProps): React.ReactElement => {
@@ -40,6 +48,18 @@ export const DashboardClient = (props: DashboardClientProps): React.ReactElement
 
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [isAsking, setIsAsking] = useState(false);
+  const [themeBackground, setThemeBackground] = useState(
+    props.initialTheme.background ?? DEFAULT_THEME.background,
+  );
+  const [themeText, setThemeText] = useState(
+    props.initialTheme.text ?? DEFAULT_THEME.text,
+  );
+  const [themeAccent, setThemeAccent] = useState(
+    props.initialTheme.accent ?? DEFAULT_THEME.accent,
+  );
+  const [themeStatus, setThemeStatus] = useState<'' | 'saving' | 'saved'>('');
+  const [themeError, setThemeError] = useState('');
+  const [showCustomTheme, setShowCustomTheme] = useState(false);
 
   const uploadFile = async (file: File): Promise<void> => {
     setUploadError('');
@@ -90,6 +110,43 @@ export const DashboardClient = (props: DashboardClientProps): React.ReactElement
   const cancelDelete = (): void => {
     setPendingDeleteId(null);
     setDeleteError('');
+  };
+
+  const applyPreset = (preset: EmbedTheme): void => {
+    setThemeBackground(preset.background);
+    setThemeText(preset.text);
+    setThemeAccent(preset.accent);
+    setThemeStatus('');
+    setThemeError('');
+    setShowCustomTheme(false);
+  };
+
+  const saveTheme = async (): Promise<void> => {
+    setThemeError('');
+    setThemeStatus('saving');
+    try {
+      const response = await fetch('/api/bot/theme', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          themeBackground,
+          themeText,
+          themeAccent,
+        }),
+      });
+      const data = (await response.json().catch(() => null)) as
+        | { error?: string }
+        | null;
+      if (!response.ok) {
+        setThemeError(data?.error ?? 'Could not save colors.');
+        setThemeStatus('');
+        return;
+      }
+      setThemeStatus('saved');
+    } catch {
+      setThemeError('Could not save colors. Please try again.');
+      setThemeStatus('');
+    }
   };
 
   const saveSlug = async (): Promise<void> => {
@@ -394,6 +451,124 @@ export const DashboardClient = (props: DashboardClientProps): React.ReactElement
             <p className="dash-panel__sub">
               Share the link anywhere, or paste the embed into your site code.
             </p>
+
+            <p className="embed-field__label">Theme</p>
+            <div className="theme-picker">
+              {EMBED_THEMES.map((preset) => {
+                const isSelected =
+                  !showCustomTheme &&
+                  preset.background === themeBackground &&
+                  preset.text === themeText &&
+                  preset.accent === themeAccent;
+                return (
+                  <button
+                    type="button"
+                    key={preset.key}
+                    className={
+                      isSelected
+                        ? 'theme-card theme-card--selected'
+                        : 'theme-card'
+                    }
+                    onClick={() => applyPreset(preset)}
+                    style={{ background: preset.background, color: preset.text }}
+                  >
+                    <span
+                      className="theme-card__dot"
+                      style={{ background: preset.accent }}
+                    />
+                    <span className="theme-card__label">{preset.label}</span>
+                  </button>
+                );
+              })}
+              <button
+                type="button"
+                className={
+                  showCustomTheme
+                    ? 'theme-card theme-card--selected'
+                    : 'theme-card'
+                }
+                onClick={() => {
+                  setShowCustomTheme(true);
+                  setThemeStatus('');
+                  setThemeError('');
+                }}
+              >
+                <span className="theme-card__label">Custom</span>
+              </button>
+            </div>
+
+            {showCustomTheme ? (
+              <div className="theme-custom">
+                <div className="theme-custom__row">
+                  <label
+                    htmlFor="theme-bg"
+                    className="theme-custom__label"
+                  >
+                    Background
+                  </label>
+                  <input
+                    id="theme-bg"
+                    type="color"
+                    value={themeBackground}
+                    onChange={(event) => {
+                      setThemeBackground(event.target.value);
+                      setThemeStatus('');
+                    }}
+                  />
+                  <span className="theme-custom__hex">{themeBackground}</span>
+                </div>
+                <div className="theme-custom__row">
+                  <label
+                    htmlFor="theme-text"
+                    className="theme-custom__label"
+                  >
+                    Text
+                  </label>
+                  <input
+                    id="theme-text"
+                    type="color"
+                    value={themeText}
+                    onChange={(event) => {
+                      setThemeText(event.target.value);
+                      setThemeStatus('');
+                    }}
+                  />
+                  <span className="theme-custom__hex">{themeText}</span>
+                </div>
+                <div className="theme-custom__row">
+                  <label
+                    htmlFor="theme-accent"
+                    className="theme-custom__label"
+                  >
+                    Accent
+                  </label>
+                  <input
+                    id="theme-accent"
+                    type="color"
+                    value={themeAccent}
+                    onChange={(event) => {
+                      setThemeAccent(event.target.value);
+                      setThemeStatus('');
+                    }}
+                  />
+                  <span className="theme-custom__hex">{themeAccent}</span>
+                </div>
+              </div>
+            ) : null}
+
+            <button
+              type="button"
+              className="embed-field__copy theme-save"
+              onClick={() => void saveTheme()}
+              disabled={themeStatus === 'saving'}
+            >
+              {themeStatus === 'saving'
+                ? 'Saving…'
+                : themeStatus === 'saved'
+                ? 'Saved ✓'
+                : 'Save colors'}
+            </button>
+            {themeError !== '' ? <p className="slug-error">{themeError}</p> : null}
 
             <label htmlFor="bot-slug" className="embed-field__label">
               Bot slug

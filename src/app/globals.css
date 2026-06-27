@@ -1501,3 +1501,144 @@ a {
 .hero--teal {
   background: #4ec3e0;
 }
+
+/* Embed chat — themed via CSS variables injected by /embed/[botId]/page.tsx */
+.embed-page {
+  background: var(--embed-bg, #ffffff);
+  min-height: 100vh;
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  padding: 16px;
+}
+.embed-chat {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  font-size: 1.05rem;
+  line-height: 1.5;
+}
+.embed-chat__window {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  flex: 1;
+  overflow-y: auto;
+}
+.embed-chat .bubble--user {
+  background: var(--embed-accent, #6c4ad6);
+  color: #ffffff;
+}
+.embed-chat .bubble--bot {
+  background: transparent;
+  color: var(--embed-text, #2b2150);
+  border: 1px solid var(--embed-text, #2b2150);
+}
+.embed-chat__form {
+  display: flex;
+  gap: 8px;
+  align-items: stretch;
+}
+.embed-chat__form input {
+  flex: 1;
+  padding: 14px 16px;
+  border: 1px solid var(--embed-text, #2b2150);
+  border-radius: 8px;
+  background: transparent;
+  color: var(--embed-text, #2b2150);
+  font-size: 1.05rem;
+  font-family: inherit;
+}
+.embed-chat__form input::placeholder {
+  color: var(--embed-text, #2b2150);
+  opacity: 0.5;
+}
+.embed-chat__send {
+  padding: 14px 20px;
+  background: var(--embed-accent, #6c4ad6);
+  color: #ffffff;
+  border: 0;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1.2rem;
+  font-family: inherit;
+}
+.embed-chat__send:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.embed-page__missing {
+  color: var(--embed-text, #2b2150);
+  text-align: center;
+}
+
+/* Theme picker — sits at top of dashboard green Share panel */
+.theme-picker {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-bottom: 16px;
+}
+.theme-card {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  border: 2px solid transparent;
+  border-radius: 8px;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-align: left;
+  background: #fff4fa;
+  color: #2b2150;
+}
+.theme-card--selected {
+  border-color: #2b2150;
+}
+.theme-card__dot {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.theme-card__label {
+  flex: 1;
+}
+.theme-custom {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.theme-custom__row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.theme-custom__label {
+  width: 90px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #fff4fa;
+}
+.theme-custom__row input[type='color'] {
+  width: 48px;
+  height: 36px;
+  border: 2px solid #2b2150;
+  border-radius: 6px;
+  padding: 0;
+  background: transparent;
+  cursor: pointer;
+}
+.theme-custom__hex {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.85rem;
+  color: #fff4fa;
+}
+.theme-save {
+  margin-bottom: 16px;
+}

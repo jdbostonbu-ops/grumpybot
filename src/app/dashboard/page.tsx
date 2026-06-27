@@ -21,7 +21,14 @@ const DashboardPage = async (): Promise<React.ReactElement> => {
   const ownedBot = await bots.getOrCreateBotForUser(userId);
   const bot = await prisma.bot.findUniqueOrThrow({
     where: { id: ownedBot.id },
-    select: { id: true, name: true, slug: true },
+    select: {
+      id: true,
+      name: true,
+      slug: true,
+      themeBackground: true,
+      themeText: true,
+      themeAccent: true,
+    },
   });
   const documents = await prisma.document.findMany({
     where: { botId: bot.id },
@@ -49,6 +56,11 @@ const DashboardPage = async (): Promise<React.ReactElement> => {
         embedUrl={embedUrl}
         initialDocs={documents}
         initialChunkCount={chunkCount}
+        initialTheme={{
+          background: bot.themeBackground,
+          text: bot.themeText,
+          accent: bot.themeAccent,
+        }}
       />
     </div>
   );

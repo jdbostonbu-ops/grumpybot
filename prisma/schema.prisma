@@ -36,7 +36,10 @@ model Bot {
   id        String   @id @default(cuid())
   name      String
   theme     String?
-  slug      String?  @unique
+  slug             String?  @unique
+  themeBackground  String?
+  themeText        String?
+  themeAccent      String?
   ownerId   String
   createdAt DateTime @default(now())
 
