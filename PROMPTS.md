@@ -307,6 +307,8 @@ Custom inquiry band:
 
 ```text
 Need a bot that isn't here?
+Have a dealine you need to meet?
+Need to conserve your tokens?
 GrumpyBot handles Q&A on your documents. For more advanced setups — Multimodal RAG (bots that read images), Agentic RAG (bots that reason in multiple steps), or Voice RAG (talk-to-your-bot) — we'll build it custom.
 Tell us about your project. We'll send you ready-to-paste code for your site.
 Start project inquiry →
@@ -577,12 +579,12 @@ Home page:
 ```text
 For cohort students · no RAG required
 Add a working AI chatbot to your project — before you've learned how to build one.
-Built for cohort students, Vibe Fridays, and portfolio projects. Upload your project's docs, get an embeddable bot, paste it on your landing page.
+Built for cohort students, new coders, new entreprenuers, Vibe Fridays, and portfolio projects. Upload your project's docs, get an embeddable bot, paste it on your landing page.
 Build my bot
 See an example
 How it works
 1. Upload
-Drop in your handbook, menu, or FAQ files.
+Drop in your mark down file, menu, handbook or FAQ md files.
 2. We build it
 Your bot learns your docs in seconds.
 3. Share
@@ -602,7 +604,7 @@ freshman year · FAQ
 Fictional World Lore
 main characters · old war
 Ready to ship your next project?
-Your first bot in under 5 minutes. Built for portfolios, demos, and Vibe Fridays.
+Your first bot in under 5 minutes. Built for portfolios, demos, real clients and Vibe Fridays.
 GrumpyBot · turn any document into a bot · made with ☕ and AI
 ```
 
@@ -628,34 +630,46 @@ Pricing page:
 
 ```text
 Simple pricing. No surprises.
-Start free. Upgrade when your bot gets popular.
+AI chatbots that only know what you teach them. From $5.
 Starter
 $5/mo
 For trying it out.
 1 bot
+500 messages
+$3 per 1,000
 5 documents
-Grounded answers with sources
 Shareable link
+Custom colors
 Start with Starter
 ★ Most popular
 Student
 $10/mo
 For cohort students with portfolio projects.
-7 bots (one per class)
+7 bots
+5,000 messages
+$3 per 1,000
 Unlimited documents
 Embed on your site
 Custom colors
-Token costs included
 Go Student
 Business
-$19/mo
+$49/mo
 For instructors, small teams, anyone past school.
-Unlimited bots
+100 bots
 Team accounts
-Remove branding
+50,000 messages
+$3 per 1,000
+Custom colors
 Priority support
 Get Business
-All plans include grounded answers, source citations, and the no-making-stuff-up guarantee. Token costs included on every plan.
+All plans include source citations and the no-making-stuff-up guarantee. Additional messages are $3 per 1,000.
+What you should know
+Cancellation and refunds. You can cancel anytime from your account settings. Cancellation takes effect at the end of your current billing cycle, and you keep access through the end of the cycle you've already paid for. Payments for started billing cycles are non-refundable. Annual plans and school packages have their own terms outlined at signing.
+Bot permanence. Once you create a bot, it's permanent. You can edit a bot's documents and styling, but you can't delete it yourself — and we can't either, except in cases of terms-of-service violations or verified user removal requests sent to support@grumpybot.fyi. This protects every embed you ship: a bot on your portfolio site, college application, or client project won't break because someone deleted it.
+Content moderation. Every embedded bot is served from GrumpyBot's servers, which means we can disable inappropriate or off-policy content platform-wide at any time. Anyone — users, embed viewers, third parties — can report a bot using the report link in its iframe footer. Reports are reviewed by GrumpyBot administrators.
+Inactive bots. When your subscription ends, your bots stop serving immediately. Embeds return a "this bot is no longer active" message — your embed code doesn't need to change. Bot data is retained for 90 days in case you resubscribe and want to restore access. After 90 days, bot data is permanently deleted.
+Overage billing. If you go over your included messages in a month, additional usage is billed at $3 per 1,000 messages at the end of your billing cycle. Heavy use of your bot (for example, embedding it on a busy commercial site) may push you into overage; you can monitor usage in your dashboard.
+For full terms, see grumpybot.fyi/terms.
 ```
 
 Grumpy Bean example page:

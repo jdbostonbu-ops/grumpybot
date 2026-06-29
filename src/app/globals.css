@@ -663,6 +663,35 @@ a {
   margin: 1.5rem auto 0;
 }
 
+.pricing-disclosures {
+  background: var(--yellow);
+  color: #000;
+  margin-top: 3rem;
+  text-align: left;
+}
+
+.pricing-disclosures__inner {
+  max-width: 920px;
+  margin: 0 auto;
+}
+
+.pricing-disclosures h2 {
+  color: #000;
+  font-size: 2.4rem;
+  margin-bottom: 1.5rem;
+}
+
+.pricing-disclosures p {
+  color: #000;
+  font-size: 1.05rem;
+  line-height: 1.7;
+  margin: 0 0 1.25rem;
+}
+
+.pricing-disclosures p:last-child {
+  margin-bottom: 0;
+}
+
 /* Dashboard ---------------------------------------------------- */
 
 
