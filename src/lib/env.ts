@@ -26,4 +26,19 @@ export const env = {
   get sessionSecret(): string {
     return required('SESSION_SECRET');
   },
+  get stripeSecretKey(): string {
+  return required('STRIPE_SECRET_KEY');
+  },
+  get stripeWebhookSecret(): string {
+    return required('STRIPE_WEBHOOK_SECRET');
+  },
+  get stripePriceStarter(): string {
+    return required('STRIPE_PRICE_STARTER');
+  },
+  get stripePriceStudent(): string {
+    return required('STRIPE_PRICE_STUDENT');
+  },
+  get stripePriceBusiness(): string {
+    return required('STRIPE_PRICE_BUSINESS');
+  },
 };

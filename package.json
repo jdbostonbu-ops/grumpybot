@@ -18,7 +18,8 @@
     "next": "15.5.19",
     "openai": "^4.77.0",
     "react": "19.0.0",
-    "react-dom": "19.0.0"
+    "react-dom": "19.0.0",
+    "stripe": "^22.3.0"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.6",

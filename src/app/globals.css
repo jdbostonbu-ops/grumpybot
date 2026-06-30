@@ -2119,3 +2119,23 @@ a {
   transform: translateY(-2px) scale(1.04);
   box-shadow: 0 12px 24px rgba(43, 33, 80, 0.18);
 }
+
+.pricing-cta-spinner {
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: pricing-cta-spin 0.7s linear infinite;
+}
+
+@keyframes pricing-cta-spin {
+  to { transform: rotate(360deg); }
+}
+
+.pricing-cta-error {
+  margin-top: 0.5rem;
+  color: #c0392b;
+  font-size: 0.875rem;
+}

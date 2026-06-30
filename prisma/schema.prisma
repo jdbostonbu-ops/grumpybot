@@ -29,6 +29,13 @@ model User {
   resetCodeExpires DateTime?
   createdAt        DateTime  @default(now())
 
+  // stripe below
+  subscriptionTier    String?   // null, 'starter', 'student', or 'business'
+  stripeCustomerId    String?   @unique
+  subscriptionStatus  String?   // 'active', 'canceled', 'past_due'
+  messageCountMonth   Int       @default(0)
+  messageCountResetAt DateTime  @default(now())
+
   bots Bot[]
 }
 
@@ -37,6 +44,7 @@ model Bot {
   name      String
   theme     String?
   slug             String?  @unique
+  lockedOrigin     String?
   themeBackground  String?
   themeText        String?
   themeAccent      String?

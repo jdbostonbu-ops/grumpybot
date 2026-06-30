@@ -1,7 +1,7 @@
 import { redirect } from 'next/navigation';
-import Link from 'next/link';
 import { getSessionUserId } from '@/lib/session';
 import { NavBar } from '@/components/NavBar';
+import { PricingCTA } from '@/components/PricingCTA';
 
 const PricingPage = async (): Promise<React.ReactElement> => {
   const userId = await getSessionUserId();
@@ -36,9 +36,7 @@ const PricingPage = async (): Promise<React.ReactElement> => {
                 <li>Shareable link</li>
                 <li>Custom colors</li>
               </ul>
-              <Link href="/dashboard" className="btn btn--outline price-card__cta">
-                Start with Starter
-              </Link>
+              <PricingCTA plan="starter" className="btn btn--outline price-card__cta" label="Start with Starter" />
             </div>
 
             <div className="card price-card price-card--featured">
@@ -56,9 +54,7 @@ const PricingPage = async (): Promise<React.ReactElement> => {
                 <li>Embed on your site</li>
                 <li>Custom colors</li>
               </ul>
-              <Link href="/dashboard" className="btn btn--primary price-card__cta">
-                Go Student
-              </Link>
+              <PricingCTA plan="student" className="btn btn--primary price-card__cta" label="Go Student" />
             </div>
 
             <div className="card price-card">
@@ -75,9 +71,7 @@ const PricingPage = async (): Promise<React.ReactElement> => {
                 <li>Custom colors</li>
                 <li>Priority support</li>
               </ul>
-              <Link href="/dashboard" className="btn btn--dark price-card__cta">
-                Get Business
-              </Link>
+              <PricingCTA plan="business" className="btn btn--dark price-card__cta" label="Get Business" />
             </div>
           </div>
           <p className="pricing-note">

@@ -13,10 +13,15 @@ const DashboardPage = async (): Promise<React.ReactElement> => {
     redirect('/login');
   }
 
-  const user = await prisma.user.findUnique({ where: { id: userId } });
+  const user = await prisma.user.findUnique({ where: { id: userId },
+  select: { subscriptionTier: true }, });
   if (user === null) {
     redirect('/login');
   }
+
+  if (user.subscriptionTier === null) {
+  redirect('/pricing');
+}
 
   const ownedBot = await bots.getOrCreateBotForUser(userId);
   const bot = await prisma.bot.findUniqueOrThrow({
