@@ -608,20 +608,47 @@ export const DashboardClient = (props: DashboardClientProps): React.ReactElement
             <div className="dash-explainer__item">
               <h3 className="dash-explainer__item-title">Bot slug</h3>
               <p className="dash-explainer__item-body">
-                Pick a short custom name (like <code>muttstrut</code>). It becomes part of your bot&apos;s URL.
+                <span className="dash-explainer__line">Pick a short custom name</span>{' '}
+                <span className="dash-explainer__line">(like <code>muttstrut</code>). It becomes</span>{' '}
+                <span className="dash-explainer__line">part of your bot&apos;s URL.</span>
               </p>
             </div>
             <div className="dash-explainer__item">
               <h3 className="dash-explainer__item-title">Public link</h3>
               <p className="dash-explainer__item-body">
-                The full URL to your bot&apos;s chat. Paste it anywhere a link can go: Instagram bio, email signature, QR code.
+                <span className="dash-explainer__line">The full URL to your bot&apos;s chat.</span>{' '}
+                <span className="dash-explainer__line">Paste it anywhere a link can go:</span>{' '}
+                <span className="dash-explainer__line">Instagram bio, email signature, QR code.</span>
               </p>
             </div>
             <div className="dash-explainer__item">
               <h3 className="dash-explainer__item-title">Embed snippet</h3>
               <p className="dash-explainer__item-body">
-                A line of code that puts your bot inside any website that lets you paste HTML.
+                <span className="dash-explainer__line">A line of code that puts your bot</span>{' '}
+                <span className="dash-explainer__line">inside any website that lets</span>{' '}
+                <span className="dash-explainer__line">you paste HTML.</span>
               </p>
+            </div>
+          </div>
+          <hr className="dash-explainer__divider" />
+          <div className="dash-explainer__lock">
+            <h3 className="dash-explainer__item-title">Lock your bot to one page</h3>
+            <p className="dash-explainer__item-body dash-explainer__lock-intro">
+              Your bot is meant for one page — the single page where you&apos;ll embed it. When you enter that page&apos;s address and lock it, your bot is tied to that page. This is how your plan works: one bot, one page.
+            </p>
+            <div className="dash-explainer__lock-grid">
+              <div className="dash-explainer__lock-box">
+                <span className="dash-explainer__lock-label">Locking</span>
+                <p className="dash-explainer__item-body">
+                  Enter the full address of the page where your bot will live (for example, <code>https://yoursite.com/your-page</code>), then lock it. Once locked, that&apos;s the page your bot belongs to.
+                </p>
+              </div>
+              <div className="dash-explainer__lock-box">
+                <span className="dash-explainer__lock-label">Releasing</span>
+                <p className="dash-explainer__item-body">
+                  Changed your mind, or moving your bot to a different page? Release the lock. Your bot is then free to be locked to a new page. Note that releasing means your bot will no longer work on the old page — so only release when you&apos;re ready to move it.
+                </p>
+              </div>
             </div>
           </div>
         </div>
