@@ -29,6 +29,7 @@ type DashboardClientProps = {
   initialChunkCount: number;
   initialTheme: InitialTheme;
   initialStreamingEnabled: boolean;
+  initialLockedOrigin: string | null;
 };
 
 export const DashboardClient = (props: DashboardClientProps): React.ReactElement => {
@@ -45,6 +46,12 @@ export const DashboardClient = (props: DashboardClientProps): React.ReactElement
   const [slugDraft, setSlugDraft] = useState(props.initialSlug);
   const [slugError, setSlugError] = useState('');
   const [slugStatus, setSlugStatus] = useState<'' | 'saving' | 'saved'>('');
+  const [lockedOrigin, setLockedOrigin] = useState<string | null>(props.initialLockedOrigin);
+  const [lockDraft, setLockDraft] = useState('');
+  const [lockError, setLockError] = useState('');
+  const [lockStatus, setLockStatus] = useState<'' | 'saving' | 'saved'>('');
+  const [pendingRelease, setPendingRelease] = useState(false);
+  const [isReleasing, setIsReleasing] = useState(false);
   const [copyStatus, setCopyStatus] = useState<'' | 'link' | 'embed'>('');
 
   const [messages, setMessages] = useState<ChatMessage[]>([]);
@@ -125,6 +132,39 @@ export const DashboardClient = (props: DashboardClientProps): React.ReactElement
   const cancelDelete = (): void => {
     setPendingDeleteId(null);
     setDeleteError('');
+  };
+
+  const requestRelease = (): void => {
+    setLockError('');
+    setPendingRelease(true);
+  };
+
+  const cancelRelease = (): void => {
+    setPendingRelease(false);
+    setLockError('');
+  };
+
+  const confirmRelease = async (): Promise<void> => {
+    setIsReleasing(true);
+    setLockError('');
+    try {
+      const response = await fetch('/api/bot/lock', {
+        method: 'DELETE',
+      });
+      const data = (await response.json().catch(() => null)) as
+        | { ok?: boolean; error?: string }
+        | null;
+      if (!response.ok || data?.ok !== true) {
+        setLockError(data?.error ?? 'Could not release the lock.');
+      } else {
+        setLockedOrigin(null);
+        setLockDraft('');
+        setPendingRelease(false);
+      }
+    } catch {
+      setLockError('Could not release the lock. Please try again.');
+    }
+    setIsReleasing(false);
   };
 
   const applyPreset = (preset: EmbedTheme): void => {
@@ -248,6 +288,38 @@ export const DashboardClient = (props: DashboardClientProps): React.ReactElement
     } catch {
       setSlugError('Could not save slug. Please try again.');
       setSlugStatus('');
+    }
+  };
+
+  const saveLock = async (): Promise<void> => {
+    const trimmed = lockDraft.trim();
+    if (trimmed === '') {
+      setLockError('Enter the full https:// address of the page where your bot will live.');
+      return;
+    }
+    setLockError('');
+    setLockStatus('saving');
+    try {
+      const response = await fetch('/api/bot/lock', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ url: trimmed }),
+      });
+      const data = (await response.json().catch(() => null)) as
+        | { ok?: boolean; lockedOrigin?: string; error?: string }
+        | null;
+      if (!response.ok || data?.ok !== true) {
+        setLockError(data?.error ?? 'Could not lock the embed.');
+        setLockStatus('');
+        return;
+      }
+      setLockedOrigin(data.lockedOrigin ?? trimmed);
+      setLockDraft('');
+      setLockStatus('saved');
+      setTimeout(() => { setLockStatus(''); }, 1800);
+    } catch {
+      setLockError('Could not lock the embed. Please try again.');
+      setLockStatus('');
     }
   };
 
@@ -784,8 +856,81 @@ export const DashboardClient = (props: DashboardClientProps): React.ReactElement
                 {slugStatus === 'saving' ? 'Saving…' : slugStatus === 'saved' ? 'Saved ✓' : 'Save'}
               </button>
             </div>
-            {slugError !== '' ? <p className="slug-error">{slugError}</p> : null}
+            {slugError !== '' ?<p className="slug-error">{slugError}</p> : null}
             {slugStatus === 'saved' ? <p className="slug-saved">Saved.</p> : null}
+
+            <label htmlFor="lock-url" className="embed-field__label">
+              Locked page (one bot, one page)
+            </label>
+            {lockedOrigin === null ? (
+              <>
+                <div className="embed-field">
+                  <input
+                    id="lock-url"
+                    type="text"
+                    value={lockDraft}
+                    onChange={(event) => {
+                      setLockDraft(event.target.value);
+                      setLockStatus('');
+                    }}
+                    placeholder="https://your-site.com/your-page"
+                    autoComplete="off"
+                    className="embed-field__input"
+                  />
+                  <button
+                    type="button"
+                    className="embed-field__copy"
+                    onClick={() => void saveLock()}
+                    disabled={lockStatus === 'saving' || lockDraft.trim() === ''}
+                  >
+                    {lockStatus === 'saving' ? 'Locking…' : 'Lock'}
+                  </button>
+                </div>
+              </>
+           ) : (
+              <div className="embed-field">
+                <input
+                  id="lock-url"
+                  type="text"
+                  readOnly
+                  value={lockedOrigin}
+                  className="embed-field__input"
+                  onFocus={(event) => event.currentTarget.select()}
+                />
+                {pendingRelease ? (
+                  <span className="doc-row__confirm">
+                    <span className="doc-row__confirm-text">
+                      Release this bot? Your embed on the locked page will stop working immediately.
+                    </span>
+                    <button
+                      type="button"
+                      className="doc-row__confirm-cancel"
+                      onClick={cancelRelease}
+                      disabled={isReleasing}
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      type="button"
+                      className="doc-row__confirm-yes"
+                      onClick={() => void confirmRelease()}
+                      disabled={isReleasing}
+                    >
+                      {isReleasing ? 'Releasing…' : 'Release'}
+                    </button>
+                  </span>
+                ) : (
+                  <button
+                    type="button"
+                    className="embed-field__copy"
+                    onClick={requestRelease}
+                  >
+                    Release
+                  </button>
+                )}
+              </div>
+            )}
+            {lockError !== '' ? <p className="slug-error">{lockError}</p> : null}
 
             <label htmlFor="embed-url" className="embed-field__label">
               Public link

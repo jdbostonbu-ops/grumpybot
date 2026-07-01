@@ -34,6 +34,7 @@ const DashboardPage = async (): Promise<React.ReactElement> => {
       themeText: true,
       themeAccent: true,
       streamingEnabled: true,
+      lockedOrigin: true,
     },
   });
   const documents = await prisma.document.findMany({
@@ -68,6 +69,7 @@ const DashboardPage = async (): Promise<React.ReactElement> => {
           accent: bot.themeAccent,
         }}
         initialStreamingEnabled={bot.streamingEnabled}
+        initialLockedOrigin={bot.lockedOrigin}
       />
     </div>
   );
