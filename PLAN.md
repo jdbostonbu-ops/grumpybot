@@ -690,15 +690,93 @@ Protocol mismatches (http:// vs https://) → different origins, must match exac
 Trailing slash differences → must be normalized in the comparison
 
 ## Layer 4: Iframe runtime JavaScript verification
-Inside the iframe rendered by /embed/[botSlug]:
 
-Page loads JavaScript that asks the parent window for its current URL
-Same-origin restrictions prevent the iframe from reading the parent's URL directly
-Use window.parent.postMessage from the iframe to request the URL
-The parent must respond via postMessage with window.location.href
-If parent doesn't respond within a short timeout: iframe displays "Embed not allowed on this domain" and stops accepting messages
-If response URL's origin doesn't match the locked declaredDomain: iframe displays the error
-Iframe phones home to a verification endpoint with the result (for logging)
+What Layer 4 catches that Layers 1-3 don't
+
+Iframe-proxy attacks. An attacker's server fetches your embed URL server-side (spoofing any Referer they want), then serves the resulting HTML from their own domain. Layers 2-3 can't see this because the Referer on the server-to-server fetch is attacker-controlled. Layer 4 catches it because when the served iframe runs in a real browser, it postMessages the parent, and the parent is the attacker's page, not your locked page.
+Browser extensions that fake Referer headers. Some privacy or dev extensions rewrite outgoing Referer values. Layer 3 sees the fake value and might allow (if fake matches lockedOrigin) or reject (if fake doesn't). Layer 4 uses window.parent.location communication instead of Referer, which most extensions don't touch.
+The scenario where the parent tries to prevent iframe communication. If a bad-actor parent page tries to isolate the iframe (e.g., via sandbox attribute restrictions or by refusing to respond to postMessage), Layer 4 detects the silence and blocks. Server-side layers can't tell whether the parent is cooperating with the iframe.
+
+Core client-side flow — runs inside the iframe on load
+
+Iframe loads the embed page (with Layer 3 already having allowed it based on the initial Referer check).
+JavaScript in the iframe waits briefly for the parent to acknowledge its presence.
+Iframe sends postMessage to parent requesting the parent's window.location.href.
+Parent listens for the request message and responds with its URL. This requires a small snippet the bot owner adds to their site (or, alternatively, we skip it if we accept that Layer 4 only works when the owner opts in — see decision 22 below).
+Iframe receives the response and extracts the origin from the parent's URL.
+Iframe compares the parent origin to lockedOrigin (which the iframe knows from the token payload).
+If match → iframe continues rendering the chat UI normally.
+If mismatch → iframe replaces its content with the branded blocked page and stops accepting input.
+If timeout (parent never responds) → iframe replaces its content with the blocked page.
+
+Server-side reporting endpoint
+
+New API route POST /api/embed/verify — receives verification reports from iframes.
+Iframe phones home with the verification result: bot ID, parent origin as reported by postMessage, match/mismatch/timeout, timestamp.
+Server logs the report to a new Prisma model (EmbedVerification) OR extends the existing EmbedAttempt model with a new result type (RUNTIME_MISMATCH, RUNTIME_TIMEOUT).
+Owner-visible metric — surfaces in dashboard later as a follow-on task, alongside the Layer 3 attempt log.
+
+Special-case handling
+
+Legitimate embed on the locked page — parent responds with matching URL, iframe continues, one verification log written (or none, depending on decision 23).
+Iframe on a non-cooperative parent page — parent doesn't listen for the message and never responds. Timeout fires, iframe blocks. Real risk: a bot owner might forget to add the parent snippet, causing their legitimate embed to fail with a timeout. Mitigation options in the decisions section.
+Iframe inside an iframe (nested) — Layer 4 must handle the case where its immediate parent isn't the locked page but a wrapper iframe. Options: walk up window.parent recursively, or reject nested embedding entirely.
+Referrer Policy edge cases — some sites use Referrer-Policy: no-referrer, which affects Layer 3 but not Layer 4. Layer 4 uses postMessage, which isn't governed by referrer policy.
+
+The parent-side snippet requirement
+
+Bot owners must add a small script to their site for Layer 4 to work fully. The snippet listens for postMessage from the iframe and responds with the current URL. This is the "parent must opt in" mechanism.
+Design decision — Do we require the snippet, or fall back gracefully if it's missing?
+
+Option A — Require it. Timeout = blocked page. Clear, but breaks embeds where owners forget the snippet.
+Option B — Optional. Timeout = allow, with a warning logged. Safer for owner UX, weaker security guarantee.
+Option C — Auto-detect. Timeout = fall back to Layer 3's Referer check. Best UX but complex to reason about.
+
+
+
+The verification log scope
+
+EmbedVerification model shape — Similar to Layer 3's EmbedAttempt, but Layer 4 specific:
+
+Log every verification event, or only mismatches/timeouts?
+Same decision as Layer 3: log rejections only (smaller table) vs log everything (real observability).
+
+
+
+The parent snippet delivery
+
+Documentation update — the dashboard's "how to embed" instructions need to include the snippet. Something like:
+
+html    <script>
+      window.addEventListener('message', (e) => {
+        if (e.data === 'grumpybot:whoAreYou') {
+          e.source.postMessage({
+            type: 'grumpybot:iAmHere',
+            url: window.location.href
+          }, e.origin);
+        }
+      });
+    </script>
+Owner copies this into their site's `<head>` alongside the iframe embed snippet.
+The blocked render on mismatch
+
+What does the iframe show when Layer 4 blocks? Options:
+
+Option A — Same branded blocked page as Layer 3 (consistent look)
+Option B — Different page indicating runtime verification failed (more debuggable for owners)
+Option C — Silent replacement with a generic error (least informative)
+
+
+
+Safety
+
+Never leak lockedOrigin in Layer 4 responses — Just like Layer 3, the blocked view shows a generic message, not "this bot is locked to example.com."
+postMessage origin verification — When receiving the parent's response, verify the message came from a real parent (via event.source === window.parent) and use event.origin for actual origin comparison. This is essential because postMessage can be spoofed from any iframe nesting level.
+Race conditions — What if the parent responds after the timeout fires? Design should ignore late responses to avoid flip-flop UI states.
+Iframe isolation — Layer 4 code must run before the chat UI initializes, so a rejected iframe never renders even briefly.
+
+Files this will touch or create
+FileNew or ModifiedWhatsrc/components/EmbedVerification.tsxNEWClient component with postMessage logicsrc/app/api/embed/verify/route.tsNEWServer endpoint for verification reportsprisma/schema.prismaModifiedAdd EmbedVerification model OR extend AttemptResult enumsrc/app/embed/[botId]/page.tsxModifiedMount EmbedVerification component before EmbedChatsrc/components/EmbedChat.tsxModifiedAccept a verified prop, don't render chat until true
 
 ## What this catches:
 
