@@ -53,6 +53,7 @@ model Bot {
   createdAt DateTime @default(now())
 
   owner     User       @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  embedAttempts EmbedAttempt[]
   documents Document[]
 
   @@index([ownerId])
@@ -81,4 +82,30 @@ model Chunk {
   document Document @relation(fields: [documentId], references: [id], onDelete: Cascade)
 
   @@index([documentId])
+}
+
+// Layer 3 embed enforcement log. Records rejected embed attempts and
+// localhost placeholder loads, so bot owners can see when their embed
+// was blocked on other sites or previewed locally. Successful loads on
+// the locked page are NOT logged — see PLAN.md for the "log rejections
+// only" rationale.
+model EmbedAttempt {
+  id           String       @id @default(cuid())
+  botId        String
+  refererOrigin String?
+  result       AttemptResult
+  createdAt    DateTime     @default(now())
+
+  bot Bot @relation(fields: [botId], references: [id], onDelete: Cascade)
+
+  @@index([botId])
+  @@index([botId, createdAt])
+}
+
+enum AttemptResult {
+  WRONG_ORIGIN
+  MISSING_REFERER
+  INVALID_TOKEN
+  MISSING_TOKEN
+  LOCALHOST_PLACEHOLDER
 }

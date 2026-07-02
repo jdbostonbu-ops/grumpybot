@@ -611,16 +611,74 @@ Reject if token is older than the configured expiry
 Without the secret key, an attacker cannot generate a valid token. The signed token proves the embed URL was issued by your server for a specific bot and a specific domain. Anyone copying the iframe URL gets the legitimate token, but the rest of the layers still check origin.
 
 ## Layer 3: Server-side Referer + token verification
-On every request to /embed/[botSlug] and /api/embed/ask:
 
-Verify the token signature is valid (per Layer 2)
-Extract declaredDomain from the verified token
-Read the Referer header from the request
-Strip Referer down to just the origin (scheme + host + port)
-Compare origin to declaredDomain
-If they match: allow the request
-If they don't match: return 403 Forbidden
-If Referer is missing: return 403 Forbidden
+- Server-Side Enforcement
+
+Layer 3 is where the token starts *doing* something. Locking declares intent, tokens prove authenticity, but nothing checks either at request time until Layer 3. On every request to `/embed/[botSlug]` and `/api/embed/ask`, the server verifies the token, reads the Referer, and blocks anything that doesn't match the locked origin.
+
+### Core Enforcement
+
+Runs on every embed request:
+
+1. Extract the token from the `?t=` query parameter
+2. Verify the token signature using `verifyEmbedToken` from Layer 2's `embed-token.ts`. If verification fails → block.
+3. Extract `lockedOrigin` from the verified token payload
+4. Read the `Referer` header from the request
+5. Strip the Referer down to origin only (scheme + host + port, no path, no query)
+6. Compare Referer origin to token's `lockedOrigin` with strict matching
+7. Allow if match (embed loads, chat works)
+8. Block if mismatch — return `403 Forbidden`
+9. Block if Referer is missing — return `403 Forbidden` (no way to verify what page it's on)
+
+### Where Enforcement Runs
+
+The check happens in two places, because embeds have two request paths:
+
+- **`GET /embed/[botSlug]`** — the iframe's initial page load. If this is blocked, the iframe renders an error message instead of the bot.
+- **`POST /api/embed/ask`** — every message the visitor sends to the bot. Even if someone bypasses the initial page block, they can't send messages without a valid token + matching Referer.
+
+### Special-Case Handling
+
+- **Localhost exception for the bot owner.** The owner needs to preview their own bot on `http://localhost:*` and `http://127.0.0.1:*` before deploying. These origins are allowed ONLY when the request is authenticated as the bot owner (session cookie present + matches `bot.ownerId`). Visitors from localhost without owner auth get `403`.
+- **Subdomain mismatches are treated as different origins.** `app.example.com` ≠ `example.com`. Web standard behavior. No fuzzy matching.
+- **Protocol mismatches are treated as different origins.** `http://` ≠ `https://`. Strict.
+- **Trailing slash and path differences are normalized** at the comparison step. Referer often carries the full URL; only the origin portion is compared.
+- **Missing or stripped Referer headers** (some privacy extensions strip them) are treated as unverifiable → `403`. Owners deploying under aggressive privacy policies need to configure their sites to allow the Referer header for their embed subdomain.
+
+### Usage Observability
+
+Every embed request is logged with:
+
+- Bot ID
+- Requested slug
+- Referer origin
+- Verification result (valid / invalid signature / wrong origin / missing referer / localhost owner exception)
+- Timestamp
+
+Log entries are stored in a Prisma `EmbedAttempt` model (bot ID, referer origin, result enum, timestamp) and aggregated for the owner's dashboard as a follow-on read-side feature.
+
+### Blocked Page Render
+
+A blocked `/embed/[botSlug]` request returns `403` with branded HTML — "This embed is not allowed on this page" — inside the iframe. A blank or broken iframe reads as "the site is broken," which reflects badly on both the platform and the bot owner. A branded error tells visitors what happened and tells the owner exactly what to fix.
+
+### Blocked API Response
+
+A blocked `POST /api/embed/ask` returns `403` with a plain `{ error: "..." }`. If the iframe was already blocked at page load, the visitor never reaches the chat UI — so the API block is defense-in-depth against direct API calls.
+
+### Cleanup and Safety
+
+- **Never leak `lockedOrigin` in error responses.** A `403` should never tell the attacker "this bot is locked to example.com" — that gives them exactly what they need to fake the Referer. Errors are generic.
+- **Origin comparison happens after HMAC verification.** Timing side-channels on the origin string itself are not a realistic attack vector because the token signature check runs first and blocks forged tokens before any string comparison happens.
+
+### Files
+
+| File | New or Modified | Purpose |
+|---|---|---|
+| `src/lib/embed-security.ts` | **NEW** | Referer parsing, origin normalization, origin comparison |
+| `prisma/schema.prisma` | Modified | Add `EmbedAttempt` model + relation to `Bot` |
+| `src/app/embed/[botSlug]/page.tsx` | Modified | Verify token + Referer + render blocked view or bot |
+| `src/app/api/embed/ask/route.ts` | Modified | Verify token + Referer before processing message |
+| `src/lib/session.ts` | Read-only | Used to identify the owner for the localhost exception |
 
 ## Localhost exception:
 The bot owner needs to preview their embed locally before deploying. Special case: localhost origins (http://localhost:*, http://127.0.0.1:*) are allowed if the request is authenticated as the bot's owner (session check matches ownerId). This means owners can test their own bots locally; visitors cannot bypass via localhost.

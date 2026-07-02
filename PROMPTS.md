@@ -808,6 +808,91 @@ Bea opened the shop with a simple philosophy: great espresso, absurd rules, and 
 }
 ```
 
+## Remaining Prompts From Latest Session
+
+These prompt-facing strings were added after the previous checkpoint and are now logged here.
+
+### Stripe Checkout Flow
+
+Sources: `src/app/checkout-success/page.tsx`, `src/app/checkout-cancel/page.tsx`, `src/app/api/checkout/route.ts`, `src/app/api/stripe/webhook/route.ts`
+
+Checkout success page:
+
+```text
+Thanks for the test payment!
+No real money moved — this is sandbox mode — but your plan is now active and your bot is ready to build.
+Open dashboard →
+```
+
+Checkout cancel page:
+
+```text
+No worries!
+You cancelled the test checkout — no real money would have moved anyway, this is sandbox mode.
+Take another look at the plans whenever you're ready.
+Back to pricing →
+```
+
+Checkout API messages:
+
+```text
+Invalid plan.
+Account not found.
+Could not create checkout session.
+Could not start checkout. Try again.
+```
+
+Stripe webhook API messages:
+
+```text
+Missing signature.
+Invalid signature.
+Missing user reference.
+Missing or invalid tier metadata.
+Missing customer id.
+Could not update user.
+```
+
+### Embed Lock Prompts
+
+Sources: `src/components/DashboardClient.tsx`, `src/app/api/bot/lock/route.ts`
+
+Dashboard explainer:
+
+```text
+Lock your bot to one page
+Your bot is meant for one page — the single page where you'll embed it. When you enter that page's address and lock it, your bot is tied to that page. This is how your plan works: one bot, one page.
+Locking
+Enter the full address of the page where your bot will live (for example, https://yoursite.com/your-page), then lock it. Once locked, that's the page your bot belongs to.
+Releasing
+Changed your mind, or moving your bot to a different page? Release the lock. Your bot is then free to be locked to a new page. Note that releasing means your bot will no longer work on the old page — so only release when you're ready to move it.
+```
+
+Embed lock controls:
+
+```text
+Locked page (one bot, one page)
+https://your-site.com/your-page
+Locking…
+Lock
+Release this bot? Your embed on the locked page will stop working immediately.
+Cancel
+Releasing…
+Release
+Lock your bot to a page above to get your public link and embed code.
+```
+
+Embed lock API and UI error messages:
+
+```text
+Enter the full https:// address of the page where your bot will live.
+This bot is already locked. Release it first to change the URL.
+Could not release the lock.
+Could not release the lock. Please try again.
+Could not lock the embed.
+Could not lock the embed. Please try again.
+```
+
 ## Prompt Logging Checkpoint
 
 Continue logging new prompt-facing strings after this checkpoint. Last reviewed sources:
@@ -840,12 +925,17 @@ src/app/api/example/ask/route.ts
 src/app/api/bot/document/[id]/route.ts
 src/app/api/bot/theme/route.ts
 src/app/api/bot/slug/route.ts
+src/app/api/bot/lock/route.ts
+src/app/api/checkout/route.ts
+src/app/api/stripe/webhook/route.ts
 src/app/api/inquiry/route.ts
 src/app/api/auth/login/route.ts
 src/app/api/auth/signup/route.ts
 src/app/api/auth/verify/route.ts
 src/app/api/auth/reset-request/route.ts
 src/app/api/auth/reset-confirm/route.ts
+src/app/checkout-success/page.tsx
+src/app/checkout-cancel/page.tsx
 src/lib/email.ts
 prisma/seed.ts
 ```

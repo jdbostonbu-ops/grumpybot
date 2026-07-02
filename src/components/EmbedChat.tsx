@@ -10,6 +10,7 @@ type ChatMessage = {
 
 type EmbedChatProps = {
   botId: string;
+  token: string;
   greeting?: string;
 };
 
@@ -93,7 +94,7 @@ export const EmbedChat = (props: EmbedChatProps): React.ReactElement => {
       const response = await fetch('/api/embed/ask', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ botId: props.botId, question: trimmed }),
+        body: JSON.stringify({ botId: props.botId, question: trimmed, token: props.token, }),
       });
       const contentType = response.headers.get('Content-Type') ?? '';
       if (

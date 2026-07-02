@@ -1,9 +1,139 @@
 import { prisma } from '@/lib/prisma';
 import { rag } from '@/lib/rag';
+import { verifyEmbedToken } from '@/lib/embed-token';
+import {
+  extractRefererOrigin,
+  isLocalhostOrigin,
+  originsMatch,
+} from '@/lib/embed-security';
 
 type AskBody = {
   botId?: unknown;
   question?: unknown;
+  token?: unknown;
+};
+
+/**
+ * Layer 3 enforcement result for a single request. Callers use the
+ * `outcome` field to decide whether to serve the answer, and the
+ * `logResult` field to write the correct AttemptResult enum value.
+ */
+type EnforcementResult =
+  | { outcome: 'allow' }
+  | {
+      outcome: 'reject';
+      status: number;
+      body: { error: string };
+      logResult:
+        | 'MISSING_TOKEN'
+        | 'INVALID_TOKEN'
+        | 'MISSING_REFERER'
+        | 'WRONG_ORIGIN'
+        | 'LOCALHOST_PLACEHOLDER';
+    };
+
+/**
+ * Closure-based enforcement check for the ask API route.
+ * Captures the bot's id and locked origin, plus the token and Referer
+ * from the current request. Returns an EnforcementResult the route
+ * uses to either continue or reject. Never leaks lockedOrigin in the
+ * response body — errors are intentionally generic.
+ */
+const createEnforcementCheck = (
+  botId: string,
+  lockedOrigin: string | null,
+  token: string,
+  refererHeader: string | null,
+): (() => EnforcementResult) => {
+  return (): EnforcementResult => {
+    // If the bot isn't locked yet, no embed traffic is allowed at all.
+    // Owners must lock before the embed can accept messages.
+    if (lockedOrigin === null) {
+      return {
+        outcome: 'reject',
+        status: 403,
+        body: { error: 'Embed not allowed.' },
+        logResult: 'WRONG_ORIGIN',
+      };
+    }
+
+    if (token === '') {
+      return {
+        outcome: 'reject',
+        status: 403,
+        body: { error: 'Embed not allowed.' },
+        logResult: 'MISSING_TOKEN',
+      };
+    }
+
+    const payload = verifyEmbedToken(token);
+    if (payload === null || payload.botId !== botId) {
+      return {
+        outcome: 'reject',
+        status: 403,
+        body: { error: 'Embed not allowed.' },
+        logResult: 'INVALID_TOKEN',
+      };
+    }
+
+    const refererOrigin = extractRefererOrigin(refererHeader);
+    if (refererOrigin === null) {
+      return {
+        outcome: 'reject',
+        status: 403,
+        body: { error: 'Embed not allowed.' },
+        logResult: 'MISSING_REFERER',
+      };
+    }
+
+    // Localhost never chats, ever. The placeholder page serves the
+    // static informational HTML from GET /embed/[botSlug], but the
+    // API endpoint always rejects localhost messages — belt and
+    // suspenders per the design.
+    if (isLocalhostOrigin(refererOrigin)) {
+      return {
+        outcome: 'reject',
+        status: 403,
+        body: { error: 'Embed not allowed.' },
+        logResult: 'LOCALHOST_PLACEHOLDER',
+      };
+    }
+
+    if (!originsMatch(refererOrigin, payload.lockedOrigin)) {
+      return {
+        outcome: 'reject',
+        status: 403,
+        body: { error: 'Embed not allowed.' },
+        logResult: 'WRONG_ORIGIN',
+      };
+    }
+
+    return { outcome: 'allow' };
+  };
+};
+
+const logAttempt = async (
+  botId: string,
+  refererOrigin: string | null,
+  result:
+    | 'MISSING_TOKEN'
+    | 'INVALID_TOKEN'
+    | 'MISSING_REFERER'
+    | 'WRONG_ORIGIN'
+    | 'LOCALHOST_PLACEHOLDER',
+): Promise<void> => {
+  try {
+    await prisma.embedAttempt.create({
+      data: {
+        botId,
+        refererOrigin,
+        result,
+      },
+    });
+  } catch {
+    // Logging must never break the response. If the DB write fails, we
+    // still return the 403 the caller expects.
+  }
 };
 
 const buildStreamResponse = (
@@ -38,9 +168,10 @@ const buildStreamResponse = (
 
 export async function POST(request: Request): Promise<Response> {
   const body = (await request.json().catch(() => null)) as AskBody | null;
-
   const botId = typeof body?.botId === 'string' ? body.botId.trim() : '';
   const question = typeof body?.question === 'string' ? body.question.trim() : '';
+  const token = typeof body?.token === 'string' ? body.token.trim() : '';
+  const refererHeader = request.headers.get('referer');
 
   if (botId === '') {
     return Response.json({ error: 'Missing bot id.' }, { status: 400 });
@@ -51,16 +182,30 @@ export async function POST(request: Request): Promise<Response> {
 
   const bot = await prisma.bot.findFirst({
     where: { OR: [{ slug: botId }, { id: botId }] },
-    select: { id: true, streamingEnabled: true },
+    select: { id: true, streamingEnabled: true, lockedOrigin: true },
   });
   if (bot === null) {
     return Response.json({ error: 'Bot not found.' }, { status: 404 });
+  }
+
+  const check = createEnforcementCheck(bot.id, bot.lockedOrigin, token, refererHeader);
+  const enforcement = check();
+
+  if (enforcement.outcome === 'reject') {
+    await logAttempt(
+      bot.id,
+      extractRefererOrigin(refererHeader),
+      enforcement.logResult,
+    );
+    return Response.json(enforcement.body, { status: enforcement.status });
   }
 
   if (bot.streamingEnabled === true) {
     const { sources, stream } = await rag.streamAnswer(bot.id, question);
     return buildStreamResponse(sources, stream);
   }
+
   const result = await rag.answerQuestion(bot.id, question);
   return Response.json(result, { status: 200 });
 }
+
