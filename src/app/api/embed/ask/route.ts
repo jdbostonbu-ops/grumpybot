@@ -44,6 +44,7 @@ const createEnforcementCheck = (
   lockedOrigin: string | null,
   token: string,
   refererHeader: string | null,
+  apiOrigin: string,
 ): (() => EnforcementResult) => {
   return (): EnforcementResult => {
     // If the bot isn't locked yet, no embed traffic is allowed at all.
@@ -90,6 +91,10 @@ const createEnforcementCheck = (
     // static informational HTML from GET /embed/[botSlug], but the
     // API endpoint always rejects localhost messages — belt and
     // suspenders per the design.
+   // Localhost never chats, ever. The placeholder page serves the
+    // static informational HTML from GET /embed/[botSlug], but the
+    // API endpoint always rejects localhost messages — belt and
+    // suspenders per the design.
     if (isLocalhostOrigin(refererOrigin)) {
       return {
         outcome: 'reject',
@@ -97,6 +102,16 @@ const createEnforcementCheck = (
         body: { error: 'Embed not allowed.' },
         logResult: 'LOCALHOST_PLACEHOLDER',
       };
+    }
+
+    // Legitimate iframe fetches send the iframe's own URL as the
+    // Referer, not the parent page's URL. When the Referer origin
+    // matches our own API origin, we allow the request — the token
+    // signature has already verified the caller is a legitimate embed
+    // for a specific lockedOrigin. The page-load GET check remains
+    // the primary defense against URL republishing on attacker sites.
+    if (originsMatch(refererOrigin, apiOrigin)) {
+      return { outcome: 'allow' };
     }
 
     if (!originsMatch(refererOrigin, payload.lockedOrigin)) {
@@ -188,7 +203,14 @@ export async function POST(request: Request): Promise<Response> {
     return Response.json({ error: 'Bot not found.' }, { status: 404 });
   }
 
-  const check = createEnforcementCheck(bot.id, bot.lockedOrigin, token, refererHeader);
+  const apiOrigin = new URL(request.url).origin;
+  const check = createEnforcementCheck(
+    bot.id,
+    bot.lockedOrigin,
+    token,
+    refererHeader,
+    apiOrigin,
+  );
   const enforcement = check();
 
   if (enforcement.outcome === 'reject') {
