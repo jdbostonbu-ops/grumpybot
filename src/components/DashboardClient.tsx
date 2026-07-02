@@ -30,6 +30,7 @@ type DashboardClientProps = {
   initialTheme: InitialTheme;
   initialStreamingEnabled: boolean;
   initialLockedOrigin: string | null;
+  initialEmbedToken: string | null;
 };
 
 export const DashboardClient = (props: DashboardClientProps): React.ReactElement => {
@@ -47,6 +48,7 @@ export const DashboardClient = (props: DashboardClientProps): React.ReactElement
   const [slugError, setSlugError] = useState('');
   const [slugStatus, setSlugStatus] = useState<'' | 'saving' | 'saved'>('');
   const [lockedOrigin, setLockedOrigin] = useState<string | null>(props.initialLockedOrigin);
+  const [embedToken, setEmbedToken] = useState<string | null>(props.initialEmbedToken);
   const [lockDraft, setLockDraft] = useState('');
   const [lockError, setLockError] = useState('');
   const [lockStatus, setLockStatus] = useState<'' | 'saving' | 'saved'>('');
@@ -158,6 +160,7 @@ export const DashboardClient = (props: DashboardClientProps): React.ReactElement
         setLockError(data?.error ?? 'Could not release the lock.');
       } else {
         setLockedOrigin(null);
+        setEmbedToken(null);
         setLockDraft('');
         setPendingRelease(false);
       }
@@ -305,8 +308,8 @@ export const DashboardClient = (props: DashboardClientProps): React.ReactElement
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ url: trimmed }),
       });
-      const data = (await response.json().catch(() => null)) as
-        | { ok?: boolean; lockedOrigin?: string; error?: string }
+     const data = (await response.json().catch(() => null)) as
+        | { ok?: boolean; lockedOrigin?: string; token?: string; error?: string }
         | null;
       if (!response.ok || data?.ok !== true) {
         setLockError(data?.error ?? 'Could not lock the embed.');
@@ -314,6 +317,7 @@ export const DashboardClient = (props: DashboardClientProps): React.ReactElement
         return;
       }
       setLockedOrigin(data.lockedOrigin ?? trimmed);
+      setEmbedToken(data.token ?? null);
       setLockDraft('');
       setLockStatus('saved');
       setTimeout(() => { setLockStatus(''); }, 1800);
@@ -461,6 +465,13 @@ export const DashboardClient = (props: DashboardClientProps): React.ReactElement
     void ask(question);
     event.currentTarget.reset();
   };
+
+  const origin = typeof window !== 'undefined' ? window.location.origin : '';
+  const embedHandle = slug !== '' ? slug : props.botId;
+  const embedBaseUrl = `${origin}/embed/${embedHandle}`;
+  const publicLink =
+    embedToken === null ? embedBaseUrl : `${embedBaseUrl}?t=${embedToken}`;
+  const embedSnippet = `<iframe src="${publicLink}" width="380" height="540" style="border:0"></iframe>`;
 
   return (
     <div className="dash">
@@ -959,57 +970,63 @@ export const DashboardClient = (props: DashboardClientProps): React.ReactElement
             )}
             {lockError !== '' ? <p className="slug-error">{lockError}</p> : null}
 
-            <label htmlFor="embed-url" className="embed-field__label">
-              Public link
-            </label>
-            <div className="embed-field">
-              <input
-                id="embed-url"
-                type="text"
-                readOnly
-                value={`${typeof window !== 'undefined' ? window.location.origin : ''}/embed/${slug !== '' ? slug : props.botId}`}
-                className="embed-field__input"
-                onFocus={(event) => event.currentTarget.select()}
-              />
-              <button
-                type="button"
-                className="embed-field__copy"
-                onClick={() => {
-                  const url = `${typeof window !== 'undefined' ? window.location.origin : ''}/embed/${slug !== '' ? slug : props.botId}`;
-                  void navigator.clipboard.writeText(url);
-                  setCopyStatus('link');
-                  setTimeout(() => { setCopyStatus(''); }, 1800);
-                }}
-              >
-                {copyStatus === 'link' ? 'Copied!' : 'Copy'}
-              </button>
-            </div>
+            {lockedOrigin === null ? (
+              <p className="embed-locked-message">
+                Lock your bot to a page above to get your public link and embed code.
+              </p>
+            ) : (
+              <>
+                <label htmlFor="embed-url" className="embed-field__label">
+                  Public link
+                </label>
+                <div className="embed-field">
+                  <input
+                    id="embed-url"
+                    type="text"
+                    readOnly
+                    value={publicLink}
+                    className="embed-field__input"
+                    onFocus={(event) => event.currentTarget.select()}
+                  />
+                  <button
+                    type="button"
+                    className="embed-field__copy"
+                    onClick={() => {
+                      void navigator.clipboard.writeText(publicLink);
+                      setCopyStatus('link');
+                      setTimeout(() => { setCopyStatus(''); }, 1800);
+                    }}
+                  >
+                    {copyStatus === 'link' ? 'Copied!' : 'Copy'}
+                  </button>
+                </div>
 
-            <label htmlFor="embed-iframe" className="embed-field__label">
-              Embed snippet
-            </label>
-            <div className="embed-field">
-              <input
-                id="embed-iframe"
-                type="text"
-                readOnly
-                value={`<iframe src="${typeof window !== 'undefined' ? window.location.origin : ''}/embed/${slug !== '' ? slug : props.botId}" width="380" height="540" style="border:0"></iframe>`}
-                className="embed-field__input"
-                onFocus={(event) => event.currentTarget.select()}
-              />
-              <button
-                type="button"
-                className="embed-field__copy"
-                onClick={() => {
-                  const snippet = `<iframe src="${typeof window !== 'undefined' ? window.location.origin : ''}/embed/${slug !== '' ? slug : props.botId}" width="380" height="540" style="border:0"></iframe>`;
-                  void navigator.clipboard.writeText(snippet);
-                  setCopyStatus('embed');
-                  setTimeout(() => { setCopyStatus(''); }, 1800);
-                }}
-              >
-                {copyStatus === 'embed' ? 'Copied!' : 'Copy'}
-              </button>
-            </div>
+                <label htmlFor="embed-iframe" className="embed-field__label">
+                  Embed snippet
+                </label>
+                <div className="embed-field">
+                  <input
+                    id="embed-iframe"
+                    type="text"
+                    readOnly
+                    value={embedSnippet}
+                    className="embed-field__input"
+                    onFocus={(event) => event.currentTarget.select()}
+                  />
+                  <button
+                    type="button"
+                    className="embed-field__copy"
+                    onClick={() => {
+                      void navigator.clipboard.writeText(embedSnippet);
+                      setCopyStatus('embed');
+                      setTimeout(() => { setCopyStatus(''); }, 1800);
+                    }}
+                  >
+                    {copyStatus === 'embed' ? 'Copied!' : 'Copy'}
+                  </button>
+                </div>
+              </>
+            )}
           </div>
         </div>
         <section className="band band--hotpink">

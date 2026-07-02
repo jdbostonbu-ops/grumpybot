@@ -5,6 +5,7 @@ import { bots } from '@/lib/bot';
 import { NavBar } from '@/components/NavBar';
 import { headers } from 'next/headers';
 import { DashboardClient } from '@/components/DashboardClient';
+import { signEmbedToken } from '@/lib/embed-token';
 
 // Layer 2 protection: re-verify the session server-side before rendering.
 const DashboardPage = async (): Promise<React.ReactElement> => {
@@ -52,7 +53,13 @@ const DashboardPage = async (): Promise<React.ReactElement> => {
   const protocol = host.startsWith('localhost') ? 'http' : 'https';
   const embedHandle = bot.slug ?? bot.id;
   const embedUrl = `${protocol}://${host}/embed/${embedHandle}`;
-
+   const initialEmbedToken =
+    bot.lockedOrigin === null
+      ? null
+      : signEmbedToken({
+          botId: bot.id,
+          lockedOrigin: bot.lockedOrigin,
+        });
   return (
     <div className="page">
       <NavBar userId={userId} />
@@ -70,6 +77,7 @@ const DashboardPage = async (): Promise<React.ReactElement> => {
         }}
         initialStreamingEnabled={bot.streamingEnabled}
         initialLockedOrigin={bot.lockedOrigin}
+        initialEmbedToken={initialEmbedToken}
       />
     </div>
   );

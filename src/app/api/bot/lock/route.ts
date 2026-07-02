@@ -2,6 +2,7 @@ import { getSessionUserId } from '@/lib/session';
 import { prisma } from '@/lib/prisma';
 import { bots } from '@/lib/bot';
 import { canonicalizeEmbedUrl } from '@/lib/embed-url';
+import { signEmbedToken } from '@/lib/embed-token';
 
 type LockBody = {
   url?: unknown;
@@ -37,13 +38,21 @@ export async function PATCH(request: Request): Promise<Response> {
     );
   }
 
-  const updated = await prisma.bot.update({
+const updated = await prisma.bot.update({
     where: { id: bot.id },
     data: { lockedOrigin: canonical },
     select: { lockedOrigin: true },
   });
 
-  return Response.json({ ok: true, lockedOrigin: updated.lockedOrigin }, { status: 200 });
+  const token = signEmbedToken({
+    botId: bot.id,
+    lockedOrigin: canonical,
+  });
+
+  return Response.json(
+    { ok: true, lockedOrigin: updated.lockedOrigin, token },
+    { status: 200 },
+  );
 }
 
 export async function DELETE(): Promise<Response> {

@@ -41,4 +41,7 @@ export const env = {
   get stripePriceBusiness(): string {
     return required('STRIPE_PRICE_BUSINESS');
   },
+  get embedTokenSecret(): string {
+    return required('EMBED_TOKEN_SECRET');
+  },
 };
