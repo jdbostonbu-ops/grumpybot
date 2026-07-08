@@ -33,14 +33,14 @@ export async function POST(request: Request): Promise<Response> {
 
   const session = event.data.object;
 
-  const userId = session.client_reference_id;
-  if (userId === null) {
-    return Response.json({ error: 'Missing user reference.' }, { status: 400 });
-  }
-
+ const userId = session.client_reference_id;
   const tier = session.metadata?.tier;
-  if (!isTier(tier)) {
-    return Response.json({ error: 'Missing or invalid tier metadata.' }, { status: 400 });
+
+  // This sandbox also bills Nymbl + CashPilot demo checkouts (Payment
+  // Links — no user reference, no tier). Not ours to fulfill: acknowledge
+  // with 200 so Stripe stops retrying.
+  if (userId === null || !isTier(tier)) {
+    return Response.json({ received: true, ignored: 'not a GrumpyBot checkout' }, { status: 200 });
   }
 
   const customerId = typeof session.customer === 'string' ? session.customer : null;
